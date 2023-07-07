@@ -37,6 +37,6 @@ Carthage/Build/
 *.xcscmblueprint
 *.xcuserstate
 *.swp
-xcuserdata/
+xcuserdata/*
 *.moved-aside
 !.gitkeep
