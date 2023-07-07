@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class SelectViewController: UIViewController {
     
-    let prefectures = [
+    let prefectures = Observable<[String]>.just([
         "北海道",
         "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
         "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
@@ -19,33 +21,25 @@ class SelectViewController: UIViewController {
         "徳島県", "香川県", "愛媛県", "高知県",
         "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県",
         "沖縄県"
-    ]
-
+    ])
+    
+    let disposeBag = DisposeBag()
+    
+    
     
     @IBOutlet weak var prefecturesTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        prefecturesTableView.dataSource = self
-        prefecturesTableView.delegate = self
         prefecturesTableView.register(UINib(nibName: "SelectTableViewCell", bundle: nil), forCellReuseIdentifier: "SelectTableViewCell")
-    }
-}
-
-extension SelectViewController:UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        prefectures.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = prefecturesTableView.dequeueReusableCell(withIdentifier: "SelectTableViewCell", for: indexPath) as! SelectTableViewCell
-        cell.prefectureNameLabel.text = prefectures[indexPath.row]
-        return cell
-    }
-}
-
-extension SelectViewController:UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.present(DetailViewController(), animated: true)
+        prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
+            cell.prefectureNameLabel.text = element
+        }.disposed(by: disposeBag)
+        
+        // 後々、選択されたセルの都道府県名を渡せるようにmodelSelectedを使用
+        prefecturesTableView.rx.modelSelected(String.self).subscribe(onNext: { selectedPrefecture in
+            self.present(DetailViewController(), animated: true)
+        })
+        .disposed(by: disposeBag)
     }
 }

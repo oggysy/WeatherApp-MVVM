@@ -73,6 +73,13 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="dateLabel" destination="EOJ-Vb-pgF" id="zTr-vR-FyY"/>
+                <outlet property="highestTempLabel" destination="kJ5-yC-JLw" id="7TN-BH-7wT"/>
+                <outlet property="humidity" destination="nB6-j8-bbs" id="ua4-VT-2uE"/>
+                <outlet property="lowestTempLabel" destination="wUF-Lu-oBz" id="0nW-Dq-4uM"/>
+                <outlet property="weatherImageView" destination="trY-3H-KMQ" id="RbM-kC-eOR"/>
+            </connections>
             <point key="canvasLocation" x="122.13740458015266" y="-17.253521126760564"/>
         </tableViewCell>
     </objects>

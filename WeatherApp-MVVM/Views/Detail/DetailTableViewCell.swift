@@ -8,7 +8,14 @@
 import UIKit
 
 class DetailTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var highestTempLabel: UILabel!
+    @IBOutlet weak var lowestTempLabel: UILabel!
+    @IBOutlet weak var humidity: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

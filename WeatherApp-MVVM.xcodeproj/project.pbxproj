@@ -28,6 +28,7 @@
 		28C780B42A57976300A69B02 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 28C780B32A57976300A69B02 /* RxCocoa */; };
 		28C780B62A57976300A69B02 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 28C780B52A57976300A69B02 /* RxRelay */; };
 		28C780B82A57976300A69B02 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 28C780B72A57976300A69B02 /* RxSwift */; };
+		28C780BA2A57CD6400A69B02 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C780B92A57CD6400A69B02 /* WeatherData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		28432C792A562B0B00C9A12E /* WeatherApp-MVVMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WeatherApp-MVVMUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28432C7D2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp_MVVMUITests.swift; sourceTree = "<group>"; };
 		28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp_MVVMUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		28C780B92A57CD6400A69B02 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		28302CAA2A565BCA001FAD42 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				28C780B92A57CD6400A69B02 /* WeatherData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				28302CA02A56491D001FAD42 /* SelectViewController.swift in Sources */,
 				28302C982A5648C9001FAD42 /* HomeViewController.swift in Sources */,
 				28302CAF2A565F52001FAD42 /* SplashViewContorller.swift in Sources */,
+				28C780BA2A57CD6400A69B02 /* WeatherData.swift in Sources */,
 				28302CBB2A568292001FAD42 /* SelectTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
