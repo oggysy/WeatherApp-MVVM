@@ -10,6 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="WeatherApp_MVVM" customModuleProvider="target">
             <connections>
+                <outlet property="currentLocationButton" destination="LId-P8-xyj" id="639-EQ-uVO"/>
+                <outlet property="selectButton" destination="Dgl-Kw-7H1" id="PdA-Ps-2ap"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,17 +27,11 @@
                             <rect key="frame" x="0.0" y="0.0" width="145.5" height="34.5"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="都道府県を選択"/>
-                            <connections>
-                                <action selector="selectButtonTapped:" destination="-1" eventType="touchUpInside" id="ZBN-pJ-rON"/>
-                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LId-P8-xyj">
                             <rect key="frame" x="0.0" y="83.5" width="145.5" height="34.5"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="現在地を取得"/>
-                            <connections>
-                                <action selector="currentLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="Yyr-h9-czO"/>
-                            </connections>
                         </button>
                     </subviews>
                 </stackView>
