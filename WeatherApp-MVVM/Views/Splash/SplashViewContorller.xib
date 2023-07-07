@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SplashViewContorller" customModule="WeatherApp_MVVM" customModuleProvider="target">
             <connections>
+                <outlet property="splashImageView" destination="g3A-mE-lb0" id="lad-Mj-jr9"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -18,21 +19,32 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunny" translatesAutoresizingMaskIntoConstraints="NO" id="Lym-Pb-ERb">
-                    <rect key="frame" x="107" y="348" width="200" height="200"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="200" id="drI-3b-yjj"/>
-                        <constraint firstAttribute="width" constant="200" id="kAK-SB-jx5"/>
-                    </constraints>
-                </imageView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cwl-Uw-0Ba">
+                    <rect key="frame" x="103" y="338.5" width="208" height="219.5"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunny" translatesAutoresizingMaskIntoConstraints="NO" id="g3A-mE-lb0">
+                            <rect key="frame" x="29" y="0.0" width="150" height="150"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="150" id="EXh-KH-WQ6"/>
+                                <constraint firstAttribute="height" constant="150" id="w2w-sz-G5e"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weather App" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1w8-DJ-5fR">
+                            <rect key="frame" x="0.0" y="178" width="208" height="41.5"/>
+                            <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="36"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="Lym-Pb-ERb" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="96G-cm-ie3"/>
-                <constraint firstItem="Lym-Pb-ERb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="SAh-Dz-acs"/>
+                <constraint firstItem="Cwl-Uw-0Ba" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="itD-PQ-RT4"/>
+                <constraint firstItem="Cwl-Uw-0Ba" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="ybl-LO-ZgR"/>
             </constraints>
-            <point key="canvasLocation" x="11" y="-11"/>
+            <point key="canvasLocation" x="10.144927536231885" y="-11.383928571428571"/>
         </view>
     </objects>
     <resources>
