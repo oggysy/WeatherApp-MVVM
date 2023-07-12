@@ -31,6 +31,12 @@ class SelectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.title = "都道府県の選択"
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = .white
+        self.navigationItem.leftBarButtonItem = backButton
+        
         prefecturesTableView.register(UINib(nibName: "SelectTableViewCell", bundle: nil), forCellReuseIdentifier: "SelectTableViewCell")
         prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
             cell.prefectureNameLabel.text = element
@@ -42,4 +48,9 @@ class SelectViewController: UIViewController {
         })
         .disposed(by: disposeBag)
     }
+    
+    @objc func backButtonTapped() {
+            self.navigationController?.popViewController(animated: true)
+    }
+    
 }
