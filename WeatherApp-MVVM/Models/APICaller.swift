@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 
 protocol weatherAPIProtcol {
-//    func fetchWeatherData(at cityname: String) -> Observable<WeatherData>
+    func fetchWeatherData(at cityname: String) -> [WeatherData]
 }
 
 class APICaller: weatherAPIProtcol {
@@ -25,8 +25,8 @@ class APICaller: weatherAPIProtcol {
     ]
     
     
-//    func fetchWeatherData(at prefecture: String) -> Observable<WeatherData> {
-//        // いったんテストデータを返す処理にする
-//        return Observable<WeatherData>()
-//    }
+    func fetchWeatherData(at prefecture: String) -> [WeatherData] {
+        // いったんテストデータを返す処理にする
+        return self.testWetherData
+    }
 }

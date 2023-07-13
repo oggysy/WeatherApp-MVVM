@@ -26,5 +26,4 @@ class SelectViewModel {
         }
         .disposed(by: disposeBag)
     }
-    
 }

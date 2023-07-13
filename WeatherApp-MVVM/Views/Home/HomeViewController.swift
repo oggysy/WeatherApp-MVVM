@@ -47,7 +47,7 @@ class HomeViewController: UIViewController {
             self.navigationController?.pushViewController(SelectViewController(), animated: true)
         }.disposed(by: dispose)
         currentLocationButton.rx.tap.subscribe { _ in
-            self.present(DetailViewController(at: ""), animated: true)
+            self.present(DetailViewController(), animated: true)
         }.disposed(by: dispose)
         
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)

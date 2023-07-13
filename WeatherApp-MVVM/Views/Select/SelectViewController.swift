@@ -19,17 +19,20 @@ class SelectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         settingNavigationBar()
-        
-        // 都道府県一覧のテーブルビューを作成
         prefecturesTableView.register(UINib(nibName: "SelectTableViewCell", bundle: nil), forCellReuseIdentifier: "SelectTableViewCell")
-        viewModel.prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
-            cell.prefectureNameLabel.text = element
-        }.disposed(by: disposeBag)
-        
-        // viewModelのselectedPrefectureに都道府県がセットされたら通知される
-        viewModel.selectedPrefecture.asObservable().subscribe { prefecture in
-            self.present(DetailViewController(at: prefecture), animated: true)
-        }.disposed(by: disposeBag)
+        disposeBag.insert(
+            // 都道府県一覧のテーブルビューを作成
+            viewModel.prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
+                cell.prefectureNameLabel.text = element
+            },
+            // viewModelのselectedPrefectureに都道府県がセットされたら通知され画面遷移
+            viewModel.selectedPrefecture.asObservable().subscribe { prefecture in
+                let vc = DetailViewController()
+                // 遷移先のviewModelに都道府県を渡して初期化しておく
+                vc.viewModel = DetailViewModel(prefecture: prefecture)
+                self.present(vc, animated: true)
+            }
+        )
     }
     
     func settingNavigationBar(){
@@ -41,7 +44,7 @@ class SelectViewController: UIViewController {
     }
     
     @objc func backButtonTapped() {
-            self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 }
