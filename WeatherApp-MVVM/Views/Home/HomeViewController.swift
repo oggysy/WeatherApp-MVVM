@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var currentLocationButton: UIButton!
-    let dispose = DisposeBag()
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,13 +43,14 @@ class HomeViewController: UIViewController {
     }
     
     func setUpButtonAction() {
-        selectButton.rx.tap.subscribe { _ in
-            self.navigationController?.pushViewController(SelectViewController(), animated: true)
-        }.disposed(by: dispose)
-        currentLocationButton.rx.tap.subscribe { _ in
-            self.present(DetailViewController(), animated: true)
-        }.disposed(by: dispose)
-        
+        disposeBag.insert(
+            selectButton.rx.tap.subscribe { _ in
+                self.navigationController?.pushViewController(SelectViewController(), animated: true)
+            },
+            currentLocationButton.rx.tap.subscribe { _ in
+                self.present(DetailViewController(), animated: true)
+            }
+        )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         currentLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
     }
