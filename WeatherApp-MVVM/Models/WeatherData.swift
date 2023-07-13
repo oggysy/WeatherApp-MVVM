@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import RxDataSources
 
 struct WeatherData {
     var date: String
@@ -14,4 +14,16 @@ struct WeatherData {
     var highestTemperature: Double
     var lowestTemperature: Double
     var humidity: Int
+}
+
+struct SectionWeatherData {
+    typealias Item = WeatherData
+    var header: String
+    var items: [WeatherData]
+}
+extension SectionWeatherData: SectionModelType {
+    init(original: SectionWeatherData, items: [WeatherData]) {
+        self = original
+        self.items = items
+    }
 }

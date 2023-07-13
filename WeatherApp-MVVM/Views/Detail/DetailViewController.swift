@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 class DetailViewController: UIViewController {
     
@@ -24,16 +25,24 @@ class DetailViewController: UIViewController {
         guard let viewModel = viewModel else { return }
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
         
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
+            configureCell: { (dataSource, tableView, indexPath, item) in
+                guard let cell = self.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
+                cell.dateLabel.text = item.date
+                cell.highestTempLabel.text = String(item.highestTemperature)
+                cell.lowestTempLabel.text = String(item.lowestTemperature)
+                cell.humidity.text = String(item.humidity)
+                cell.weatherImageView.image = UIImage(named: item.weather)
+                return cell
+            },
+            titleForHeaderInSection: { dataSource, index in
+                return dataSource.sectionModels[index].header
+            }
+        )
+
         disposeBag.insert(
             // viewModelのweatherDataにtableViewをバインド
-            viewModel.weatherData.bind(to: detailTableView.rx.items(cellIdentifier: "DetailTableViewCell", cellType: DetailTableViewCell.self)) {
-                row, element, cell in
-                cell.dateLabel.text = element.date
-                cell.weatherImageView.image = UIImage(named: element.weather)
-                cell.highestTempLabel.text = String(element.highestTemperature)
-                cell.lowestTempLabel.text = String(element.lowestTemperature)
-                cell.humidity.text = String(element.humidity)
-            },
+            viewModel.weatherData.asObservable().bind(to: detailTableView.rx.items(dataSource: dataSource)),
             Observable.just(()).bind(to: viewModel.fetchDataTrigger),
             closeButton.rx.tap.subscribe { _ in
                 self.dismiss(animated: true)

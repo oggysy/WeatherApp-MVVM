@@ -12,7 +12,7 @@ import RxCocoa
 class DetailViewModel {
     
     var selectedPrefecture: BehaviorSubject<String>
-    let weatherData = BehaviorRelay<[WeatherData]>(value: [])
+    let weatherData = BehaviorRelay<[SectionWeatherData]>(value: [])
     let fetchDataTrigger = PublishSubject<Void>()
     let weatherModel: weatherAPIProtcol
     let disposeBag = DisposeBag()
