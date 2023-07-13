@@ -50,7 +50,7 @@ class SelectViewController: UIViewController {
     }
     
     @objc func backButtonTapped() {
-            self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 }
