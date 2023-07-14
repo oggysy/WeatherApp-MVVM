@@ -24,6 +24,7 @@ class HomeViewController: UIViewController {
         setUpButtonAction()
         viewModel.location.subscribe { newLocation in
             print(newLocation)
+            self.present(DetailViewController(), animated: true)
         }.disposed(by: disposeBag)
     }
     
@@ -52,9 +53,6 @@ class HomeViewController: UIViewController {
         disposeBag.insert(
             selectButton.rx.tap.subscribe { _ in
                 self.navigationController?.pushViewController(SelectViewController(), animated: true)
-            },
-            currentLocationButton.rx.tap.subscribe { _ in
-                self.present(DetailViewController(), animated: true)
             }
         )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
