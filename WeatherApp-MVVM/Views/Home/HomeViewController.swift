@@ -13,12 +13,18 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var currentLocationButton: UIButton!
-    let disposeBag = DisposeBag()
+    lazy var viewModel: HomeViewModel = { [self] in
+        return HomeViewModel(locationButtonObservable: currentLocationButton.rx.tap.asObservable())
+    }()
+     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNavigationBar()
         setUpButtonAction()
+        viewModel.location.subscribe { newLocation in
+            print(newLocation)
+        }.disposed(by: disposeBag)
     }
     
     @objc func rightButtonTapped() {
@@ -48,6 +54,7 @@ class HomeViewController: UIViewController {
                 self.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
             currentLocationButton.rx.tap.subscribe { _ in
+                
                 self.present(DetailViewController(), animated: true)
             }
         )
