@@ -29,7 +29,7 @@ class APICaller: weatherAPIProtcol {
                            ])
     ]
     
-    
+
     func fetchWeatherData(at prefecture: String) -> [SectionWeatherData] {
         // いったんテストデータを返す処理にする
         return self.testWetherData

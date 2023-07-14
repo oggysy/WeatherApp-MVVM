@@ -29,9 +29,9 @@ class DetailViewController: UIViewController {
             configureCell: { (dataSource, tableView, indexPath, item) in
                 guard let cell = self.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
                 cell.dateLabel.text = item.date
-                cell.highestTempLabel.text = String(item.highestTemperature)
-                cell.lowestTempLabel.text = String(item.lowestTemperature)
-                cell.humidity.text = String(item.humidity)
+                cell.highestTempLabel.text = "最高気温:\(String(item.highestTemperature))℃"
+                cell.lowestTempLabel.text = "最低気温:\(String(item.lowestTemperature))℃"
+                cell.humidity.text = "湿度:\(String(item.humidity))%"
                 cell.weatherImageView.image = UIImage(named: item.weather)
                 return cell
             },
