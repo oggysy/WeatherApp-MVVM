@@ -24,7 +24,9 @@ class HomeViewController: UIViewController {
         setUpButtonAction()
         viewModel.location.subscribe { newLocation in
             print(newLocation)
-            self.present(DetailViewController(), animated: true)
+            let vc = DetailViewController()
+            vc.viewModel = DetailViewModel(prefecture: "東京都") //仮で東京都を入れている
+            self.present(vc, animated: true)
         }.disposed(by: disposeBag)
     }
     
