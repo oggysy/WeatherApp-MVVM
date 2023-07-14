@@ -54,7 +54,6 @@ class HomeViewController: UIViewController {
                 self.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
             currentLocationButton.rx.tap.subscribe { _ in
-                
                 self.present(DetailViewController(), animated: true)
             }
         )
