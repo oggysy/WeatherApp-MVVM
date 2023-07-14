@@ -22,18 +22,18 @@ class HomeViewModel {
     
     init(locationButtonObservable: Observable<Void>){
         self.locationManager.requestWhenInUseAuthorization()
-        locationButtonObservable.subscribe { _ in
-            self.locationManager.startUpdatingLocation()
-        }.disposed(by: disposeBag)
-        
-        locationManager.rx
-                   .location
-                   .compactMap { $0 }
-                   .subscribe(onNext: { [weak self] newLocation in
-                       self?.locationSubject.onNext(newLocation)
-                       self?.locationManager.stopUpdatingLocation()  // 位置情報の取得を停止する
-                   })
-                   .disposed(by: disposeBag)
+        disposeBag.insert(
+            locationButtonObservable.subscribe { _ in
+                self.locationManager.startUpdatingLocation()
+            },
+            locationManager.rx
+                .location
+                .compactMap { $0 }
+                .subscribe(onNext: { [weak self] newLocation in
+                    self?.locationSubject.onNext(newLocation)
+                    self?.locationManager.stopUpdatingLocation()  // 位置情報の取得を停止する
+                })
+        )
     }
 }
 
