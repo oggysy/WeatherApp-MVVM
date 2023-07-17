@@ -12,7 +12,6 @@ import RxCocoa
 class SelectViewController: UIViewController {
     // viewModelにセルタップのObservableを渡して初期化
     private lazy var viewModel: SelectViewModel = SelectViewModel(
-        seldectedPrefecture: prefecturesTableView.rx.modelSelected(String.self).asObservable()
     )
     let disposeBag = DisposeBag()
     @IBOutlet weak var prefecturesTableView: UITableView!
@@ -25,13 +24,11 @@ class SelectViewController: UIViewController {
             viewModel.prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
                 cell.prefectureNameLabel.text = element
             },
-            // viewModelのselectedPrefectureに都道府県がセットされたら通知され画面遷移
-            viewModel.selectedPrefecture.asObservable().subscribe { prefecture in
+            prefecturesTableView.rx.modelSelected(String.self).subscribe(onNext: { [weak self] pregecture in
                 let vc = DetailViewController()
-                // 遷移先のviewModelに都道府県を渡して初期化しておく
-                vc.viewModel = DetailViewModel(prefecture: prefecture)
-                self.present(vc, animated: true)
-            }
+                vc.viewModel = DetailViewModel(prefecture: pregecture)
+                self?.present(vc, animated: true)
+            })
         )
     }
     
