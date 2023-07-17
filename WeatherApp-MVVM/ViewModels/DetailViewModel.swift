@@ -20,10 +20,10 @@ class DetailViewModel {
     init(prefecture: String) {
         self.selectedPrefecture = BehaviorSubject(value: prefecture)
         weatherModel = APICaller()
-        fetchDataTrigger.subscribe(onDisposed: {
-            let data = try? self.weatherModel.fetchWeatherData(at: self.selectedPrefecture.value())
+        fetchDataTrigger.subscribe(onDisposed: { [weak self] in
+            let data = try? self?.weatherModel.fetchWeatherData(at: self?.selectedPrefecture.value() ?? "")
             guard let data = data else { return }
-            self.weatherData.accept(data)
+            self?.weatherData.accept(data)
         })
         .disposed(by: disposeBag)
     }

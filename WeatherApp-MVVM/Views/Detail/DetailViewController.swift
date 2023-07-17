@@ -26,8 +26,8 @@ class DetailViewController: UIViewController {
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
         
         let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
-            configureCell: { (dataSource, tableView, indexPath, item) in
-                guard let cell = self.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
+            configureCell: { [weak self] (dataSource, tableView, indexPath, item) in
+                guard let cell = self?.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
                 cell.dateLabel.text = item.date
                 cell.highestTempLabel.text = "最高気温:\(String(item.highestTemperature))℃"
                 cell.lowestTempLabel.text = "最低気温:\(String(item.lowestTemperature))℃"

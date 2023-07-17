@@ -27,10 +27,10 @@ class SplashViewContorller: UIViewController {
         }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             let viewContoroller = HomeViewController()
             viewContoroller.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-            self.navigationController?.pushViewController(viewContoroller, animated: true)
+            self?.navigationController?.pushViewController(viewContoroller, animated: true)
         }
     }
 }
