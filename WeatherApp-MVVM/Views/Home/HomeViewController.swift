@@ -44,11 +44,11 @@ class HomeViewController: UIViewController {
     
     func setUpButtonAction() {
         disposeBag.insert(
-            selectButton.rx.tap.subscribe { _ in
-                self.navigationController?.pushViewController(SelectViewController(), animated: true)
+            selectButton.rx.tap.subscribe { [weak self] _ in
+                self?.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
-            currentLocationButton.rx.tap.subscribe { _ in
-                self.present(DetailViewController(), animated: true)
+            currentLocationButton.rx.tap.subscribe { [weak self] _ in
+                self?.present(DetailViewController(), animated: true)
             }
         )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
