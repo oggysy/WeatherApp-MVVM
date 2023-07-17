@@ -15,9 +15,6 @@ class HomeViewModel {
     
     lazy var locationManager = CLLocationManager()
     let locationSubject = PublishSubject<CLLocation>()
-    var location: Observable<CLLocation> {
-        return locationSubject.asObservable()
-    }
     let disposeBag = DisposeBag()
     
     init(locationButtonObservable: Observable<Void>){

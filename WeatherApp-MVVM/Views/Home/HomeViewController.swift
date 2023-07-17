@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setUpNavigationBar()
         setUpButtonAction()
-        viewModel.location.subscribe { newLocation in
+        viewModel.locationSubject.subscribe { newLocation in
             print(newLocation)
             let vc = DetailViewController()
             vc.viewModel = DetailViewModel(prefecture: "東京都") //仮で東京都を入れている
