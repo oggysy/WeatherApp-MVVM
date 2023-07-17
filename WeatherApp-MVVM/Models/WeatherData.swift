@@ -19,10 +19,10 @@ struct WeatherData {
 struct SectionWeatherData {
     typealias Item = WeatherData
     var header: String
-    var items: [WeatherData]
+    var items: [Item]
 }
 extension SectionWeatherData: SectionModelType {
-    init(original: SectionWeatherData, items: [WeatherData]) {
+    init(original: SectionWeatherData, items: [Item]) {
         self = original
         self.items = items
     }
