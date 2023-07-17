@@ -9,11 +9,11 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-protocol weatherAPIProtcol {
+protocol WeatherAPIProtcol {
     func fetchWeatherData(at cityname: String) -> [SectionWeatherData]
 }
 
-class APICaller: weatherAPIProtcol {
+class APICaller: WeatherAPIProtcol {
     
     let testWetherData = [ SectionWeatherData(header: "7月13日", items: [
         WeatherData(date: "15:00", weather: "sunny", highestTemperature: 15.0, lowestTemperature: 20.0, humidity: 50),

@@ -14,7 +14,7 @@ class DetailViewModel {
     var selectedPrefecture: BehaviorSubject<String>
     let weatherData = BehaviorRelay<[SectionWeatherData]>(value: [])
     let fetchDataTrigger = PublishSubject<Void>()
-    let weatherModel: weatherAPIProtcol
+    let weatherModel: WeatherAPIProtcol
     let disposeBag = DisposeBag()
     
     init(prefecture: String) {
