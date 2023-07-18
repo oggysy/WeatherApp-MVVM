@@ -17,12 +17,12 @@ class HomeViewModel {
     let locationSubject = PublishSubject<CLLocation>()
     let disposeBag = DisposeBag()
     
-    init(locationButtonObservable: Observable<Void>){
+    init(locationButtonObservable: Signal<Void>){
         self.locationManager.requestWhenInUseAuthorization()
         disposeBag.insert(
-            locationButtonObservable.subscribe { _ in
+            locationButtonObservable.emit(onNext: { _ in
                 self.locationManager.startUpdatingLocation()
-            },
+            }),
             locationManager.rx
                 .location
                 .compactMap { $0 }

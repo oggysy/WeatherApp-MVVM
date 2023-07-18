@@ -24,9 +24,9 @@ class SelectViewController: UIViewController {
             viewModel.prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
                 cell.prefectureNameLabel.text = element
             },
-            prefecturesTableView.rx.modelSelected(String.self).subscribe(onNext: { [weak self] pregecture in
+            prefecturesTableView.rx.modelSelected(String.self).asSignal().emit(onNext: { [weak self] prefecture in
                 let vc = DetailViewController()
-                vc.viewModel = DetailViewModel(prefecture: pregecture)
+                vc.viewModel = DetailViewModel(prefecture: prefecture)
                 self?.present(vc, animated: true)
             })
         )
