@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="closeButton" destination="OMT-ZO-liO" id="WqI-a2-NRd"/>
                 <outlet property="detailTableView" destination="emh-gX-i1A" id="hmA-Bl-ui5"/>
+                <outlet property="prefectureLabel" destination="Tvt-uo-mKJ" id="UCM-MZ-6WV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -35,22 +36,22 @@
                     <rect key="frame" x="0.0" y="60.5" width="414" height="358.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rXX-Po-RFP">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="77.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="83.5"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="東京都" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvt-uo-mKJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="20.5"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="26.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2023年7月6日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g0z-rl-pKp">
-                                    <rect key="frame" x="151" y="28.5" width="112" height="20.5"/>
+                                    <rect key="frame" x="151" y="34.5" width="112" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="降水確率" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4PB-TC-gdb">
-                                    <rect key="frame" x="172.5" y="57" width="69.5" height="20.5"/>
+                                    <rect key="frame" x="172.5" y="63" width="69.5" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -63,7 +64,7 @@
                             </constraints>
                         </stackView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y6h-Xk-w9o">
-                            <rect key="frame" x="0.0" y="77.5" width="414" height="281"/>
+                            <rect key="frame" x="0.0" y="93.5" width="414" height="265"/>
                             <color key="backgroundColor" systemColor="systemGray2Color"/>
                         </view>
                     </subviews>
@@ -74,7 +75,7 @@
                         <constraint firstAttribute="bottom" secondItem="y6h-Xk-w9o" secondAttribute="bottom" id="KWA-WL-4JT"/>
                         <constraint firstAttribute="trailing" secondItem="rXX-Po-RFP" secondAttribute="trailing" id="jC1-Co-XuA"/>
                         <constraint firstItem="y6h-Xk-w9o" firstAttribute="leading" secondItem="mAS-9a-P5O" secondAttribute="leading" id="oEH-wg-y3U"/>
-                        <constraint firstItem="y6h-Xk-w9o" firstAttribute="top" secondItem="rXX-Po-RFP" secondAttribute="bottom" id="vha-pe-DIC"/>
+                        <constraint firstItem="y6h-Xk-w9o" firstAttribute="top" secondItem="rXX-Po-RFP" secondAttribute="bottom" constant="10" id="vha-pe-DIC"/>
                         <constraint firstItem="rXX-Po-RFP" firstAttribute="leading" secondItem="mAS-9a-P5O" secondAttribute="leading" id="wGv-bt-KX2"/>
                     </constraints>
                 </view>

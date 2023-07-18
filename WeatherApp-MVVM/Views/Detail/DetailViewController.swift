@@ -8,48 +8,46 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 class DetailViewController: UIViewController {
-
     
+    
+    @IBOutlet weak var prefectureLabel: UILabel!
     @IBOutlet weak var detailTableView: UITableView!
     @IBOutlet weak var closeButton: UIButton!
-    let disposeBag = DisposeBag()
-    let weatherData = Observable<[WeatherData]>.just([
-        WeatherData(date: "0:00", weather: "sunny", highestTemperature: 15.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "3:00", weather: "sunny", highestTemperature: 20.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "6:00", weather: "sunny", highestTemperature: 22.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "9:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "12:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "15:00", weather: "sunny", highestTemperature: 30.0, lowestTemperature: 20.0, humidity: 50)
-    ])
+    
+    var viewModel: DetailViewModel?
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let viewModel = viewModel else { return }
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
-        weatherData.bind(to: detailTableView.rx.items(cellIdentifier: "DetailTableViewCell", cellType: DetailTableViewCell.self)) {
-            row, element, cell in
-            cell.dateLabel.text = element.date
-            cell.weatherImageView.image = UIImage(named: element.weather)
-            cell.highestTempLabel.text = String(element.highestTemperature)
-            cell.lowestTempLabel.text = String(element.lowestTemperature)
-            cell.humidity.text = String(element.humidity)
-        }.disposed(by: disposeBag)
         
-        
-        closeButton.rx.tap.subscribe { _ in
-            self.dismiss(animated: true)
-        }.disposed(by: disposeBag)
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
+            configureCell: { [weak self] (dataSource, tableView, indexPath, item) in
+                guard let cell = self?.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
+                cell.dateLabel.text = item.date
+                cell.highestTempLabel.text = "最高気温:\(String(item.highestTemperature))℃"
+                cell.lowestTempLabel.text = "最低気温:\(String(item.lowestTemperature))℃"
+                cell.humidity.text = "湿度:\(String(item.humidity))%"
+                cell.weatherImageView.image = UIImage(named: item.weather)
+                return cell
+            },
+            titleForHeaderInSection: { dataSource, index in
+                return dataSource.sectionModels[index].header
+            }
+        )
+
+        disposeBag.insert(
+            // viewModelのweatherDataにtableViewをバインド
+            viewModel.weatherData.asObservable().bind(to: detailTableView.rx.items(dataSource: dataSource)),
+            Observable.just(()).bind(to: viewModel.fetchDataTrigger),
+            closeButton.rx.tap.subscribe { _ in
+                self.dismiss(animated: true)
+            },
+            viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text)
+        )
     }
 }
-//
-//extension DetailViewController: UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        10
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath)
-//        return cell
-//    }
-//}
