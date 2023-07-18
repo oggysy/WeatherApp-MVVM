@@ -50,9 +50,6 @@ class HomeViewController: UIViewController {
             selectButton.rx.tap.asSignal().emit { [weak self] _ in
                 self?.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
-            currentLocationButton.rx.tap.subscribe { [weak self] _ in
-                self?.present(DetailViewController(), animated: true)
-            },
             viewModel.locationDriver.drive(onNext: { newLocation in
                 print(newLocation)
                 let vc = DetailViewController()
