@@ -53,7 +53,7 @@ class HomeViewController: UIViewController {
             currentLocationButton.rx.tap.subscribe { [weak self] _ in
                 self?.present(DetailViewController(), animated: true)
             },
-            viewModel.locationSubject.subscribe(onNext: { newLocation in
+            viewModel.locationDriver.drive(onNext: { newLocation in
                 print(newLocation)
                 let vc = DetailViewController()
                 vc.viewModel = DetailViewModel(prefecture: "東京都") //仮で東京都を入れている

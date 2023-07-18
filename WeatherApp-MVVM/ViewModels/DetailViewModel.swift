@@ -13,6 +13,9 @@ class DetailViewModel {
     
     var selectedPrefecture: BehaviorSubject<String>
     let weatherData = BehaviorRelay<[SectionWeatherData]>(value: [])
+    var weatherDataDriver: Driver<[SectionWeatherData]> {
+        weatherData.asDriver()
+    }
     let fetchDataTrigger = PublishSubject<Void>()
     let weatherModel: WeatherAPIProtcol
     let disposeBag = DisposeBag()

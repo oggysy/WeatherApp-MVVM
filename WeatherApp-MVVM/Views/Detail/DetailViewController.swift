@@ -42,7 +42,7 @@ class DetailViewController: UIViewController {
 
         disposeBag.insert(
             // viewModelのweatherDataにtableViewをバインド
-            viewModel.weatherData.asObservable().bind(to: detailTableView.rx.items(dataSource: dataSource)),
+            viewModel.weatherDataDriver.drive(detailTableView.rx.items(dataSource: dataSource)),
             Observable.just(()).bind(to: viewModel.fetchDataTrigger),
             closeButton.rx.tap.subscribe { _ in
                 self.dismiss(animated: true)

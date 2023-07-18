@@ -15,6 +15,9 @@ class HomeViewModel {
     
     lazy var locationManager = CLLocationManager()
     let locationSubject = PublishSubject<CLLocation>()
+    var locationDriver: Driver<CLLocation> {
+        return locationSubject.asDriver(onErrorJustReturn: CLLocation())
+    }
     let disposeBag = DisposeBag()
     
     init(locationButtonObservable: Signal<Void>){

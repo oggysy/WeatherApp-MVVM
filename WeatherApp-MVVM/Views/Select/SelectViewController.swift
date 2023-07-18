@@ -21,7 +21,7 @@ class SelectViewController: UIViewController {
         prefecturesTableView.register(UINib(nibName: "SelectTableViewCell", bundle: nil), forCellReuseIdentifier: "SelectTableViewCell")
         disposeBag.insert(
             // 都道府県一覧のテーブルビューを作成
-            viewModel.prefectures.bind(to: prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
+            viewModel.prefecturesDriver.drive(prefecturesTableView.rx.items(cellIdentifier: "SelectTableViewCell", cellType: SelectTableViewCell.self)) { row, element, cell in
                 cell.prefectureNameLabel.text = element
             },
             prefecturesTableView.rx.modelSelected(String.self).asSignal().emit(onNext: { [weak self] prefecture in
