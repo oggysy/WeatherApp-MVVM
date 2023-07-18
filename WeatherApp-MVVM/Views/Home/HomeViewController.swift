@@ -53,20 +53,14 @@ class HomeViewController: UIViewController {
     
     func setUpButtonAction() {
         disposeBag.insert(
-<<<<<<< HEAD
-            selectButton.rx.tap.subscribe { _ in
-                self.navigationController?.pushViewController(SelectViewController(), animated: true)
-=======
             selectButton.rx.tap.subscribe { [weak self] _ in
                 self?.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
             currentLocationButton.rx.tap.subscribe { [weak self] _ in
                 self?.present(DetailViewController(), animated: true)
-                
-                )
-                selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
-                currentLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
             }
-            }
->>>>>>> 9560d2a (コンフリクト解決)
-            }
+        )
+        selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
+        currentLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+    }
+}
