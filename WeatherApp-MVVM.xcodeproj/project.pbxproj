@@ -33,6 +33,8 @@
 		28C780BA2A57CD6400A69B02 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C780B92A57CD6400A69B02 /* WeatherData.swift */; };
 		28CC00EE2A5F7DA500EA1C3B /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */; };
 		28CC00F02A5F901700EA1C3B /* SelectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CC00EF2A5F901700EA1C3B /* SelectViewModel.swift */; };
+		28D0DF6D2A60DFF400139746 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D0DF6C2A60DFF400139746 /* HomeViewModel.swift */; };
+		28D0DF702A60ECBD00139746 /* RxCoreLocation in Frameworks */ = {isa = PBXBuildFile; productRef = 28D0DF6F2A60ECBD00139746 /* RxCoreLocation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +81,7 @@
 		28C780B92A57CD6400A69B02 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
 		28CC00EF2A5F901700EA1C3B /* SelectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectViewModel.swift; sourceTree = "<group>"; };
+		28D0DF6C2A60DFF400139746 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,7 @@
 			files = (
 				28C780B82A57976300A69B02 /* RxSwift in Frameworks */,
 				28BB07412A601B670026AD24 /* RxDataSources in Frameworks */,
+				28D0DF702A60ECBD00139746 /* RxCoreLocation in Frameworks */,
 				28C780B62A57976300A69B02 /* RxRelay in Frameworks */,
 				28C780B42A57976300A69B02 /* RxCocoa in Frameworks */,
 			);
@@ -133,6 +137,7 @@
 		28302CAC2A565BEE001FAD42 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				28D0DF6C2A60DFF400139746 /* HomeViewModel.swift */,
 				28C28D4F2A5EAE16000F5B41 /* DetailViewModel.swift */,
 				28CC00EF2A5F901700EA1C3B /* SelectViewModel.swift */,
 			);
@@ -251,6 +256,7 @@
 				28C780B52A57976300A69B02 /* RxRelay */,
 				28C780B72A57976300A69B02 /* RxSwift */,
 				28BB07402A601B670026AD24 /* RxDataSources */,
+				28D0DF6F2A60ECBD00139746 /* RxCoreLocation */,
 			);
 			productName = "WeatherApp-MVVM";
 			productReference = 28432C592A562B0A00C9A12E /* WeatherApp-MVVM.app */;
@@ -327,6 +333,7 @@
 			packageReferences = (
 				28C780B22A57976300A69B02 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				28BB073F2A601B670026AD24 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				28D0DF6E2A60ECBD00139746 /* XCRemoteSwiftPackageReference "RxCoreLocation" */,
 			);
 			productRefGroup = 28432C5A2A562B0A00C9A12E /* Products */;
 			projectDirPath = "";
@@ -383,6 +390,7 @@
 				28432C5F2A562B0A00C9A12E /* SceneDelegate.swift in Sources */,
 				28302CA02A56491D001FAD42 /* SelectViewController.swift in Sources */,
 				28302C982A5648C9001FAD42 /* HomeViewController.swift in Sources */,
+				28D0DF6D2A60DFF400139746 /* HomeViewModel.swift in Sources */,
 				28302CAF2A565F52001FAD42 /* SplashViewContorller.swift in Sources */,
 				28CC00EE2A5F7DA500EA1C3B /* APICaller.swift in Sources */,
 				28C780BA2A57CD6400A69B02 /* WeatherData.swift in Sources */,
@@ -719,6 +727,14 @@
 				minimumVersion = 6.0.0;
 			};
 		};
+		28D0DF6E2A60ECBD00139746 /* XCRemoteSwiftPackageReference "RxCoreLocation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxCoreLocation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -741,6 +757,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 28C780B22A57976300A69B02 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		28D0DF6F2A60ECBD00139746 /* RxCoreLocation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28D0DF6E2A60ECBD00139746 /* XCRemoteSwiftPackageReference "RxCoreLocation" */;
+			productName = RxCoreLocation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
