@@ -28,18 +28,18 @@ class DetailViewController: UIViewController {
         let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
             configureCell: { [weak self] (dataSource, tableView, indexPath, item) in
                 guard let cell = self?.detailTableView.dequeueReusableCell(withIdentifier: "DetailTableViewCell", for: indexPath) as? DetailTableViewCell else { return UITableViewCell() }
-                cell.dateLabel.text = item.date
-                cell.highestTempLabel.text = "最高気温:\(String(item.highestTemperature))℃"
-                cell.lowestTempLabel.text = "最低気温:\(String(item.lowestTemperature))℃"
-                cell.humidity.text = "湿度:\(String(item.humidity))%"
-                cell.weatherImageView.image = UIImage(named: item.weather)
+                cell.dateLabel.text = item.time
+                cell.highestTempLabel.text = "最高気温:\(item.maxTemparture)℃"
+                cell.lowestTempLabel.text = "最低気温:\(item.minTemparture)℃"
+                cell.humidity.text = "湿度:\(item.humidity)%"
+                cell.weatherImageView.image = UIImage(data: item.iconData)
                 return cell
             },
             titleForHeaderInSection: { dataSource, index in
                 return dataSource.sectionModels[index].header
             }
         )
-
+        
         disposeBag.insert(
             // viewModelのweatherDataにtableViewをバインド
             viewModel.weatherDataDriver.drive(detailTableView.rx.items(dataSource: dataSource)),

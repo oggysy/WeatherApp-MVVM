@@ -6,32 +6,63 @@
 //
 
 import Foundation
+import UIKit
 import RxCocoa
 import RxSwift
+import Alamofire
+import AlamofireImage
 
 protocol WeatherAPIProtcol {
-    func fetchWeatherData(at cityname: String) -> [SectionWeatherData]
+    func fetchWeatherData(at prefecture: String) -> Single<WeatherData>
+    func fetchWeatherIcon(iconName: String) -> Single<Data>
 }
 
 class APICaller: WeatherAPIProtcol {
     
-    let testWetherData = [ SectionWeatherData(header: "7月13日", items: [
-        WeatherData(date: "15:00", weather: "sunny", highestTemperature: 15.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "18:00", weather: "sunny", highestTemperature: 20.0, lowestTemperature: 20.0, humidity: 50),
-        WeatherData(date: "21:00", weather: "sunny", highestTemperature: 22.0, lowestTemperature: 20.0, humidity: 50),
-    ]),
-                           SectionWeatherData(header: "7月14日", items: [
-                            WeatherData(date: "0:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50),
-                            WeatherData(date: "3:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50),
-                            WeatherData(date: "6:00", weather: "sunny", highestTemperature: 30.0, lowestTemperature: 20.0, humidity: 50),
-                            WeatherData(date: "9:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50),
-                            WeatherData(date: "12:00", weather: "sunny", highestTemperature: 25.0, lowestTemperature: 20.0, humidity: 50)
-                           ])
-    ]
-    
-
-    func fetchWeatherData(at prefecture: String) -> [SectionWeatherData] {
-        // いったんテストデータを返す処理にする
-        return self.testWetherData
+    func fetchWeatherData(at prefecture: String) -> Single<WeatherData> {
+        return Single<WeatherData>.create { single in
+            let decoder = JSONDecoder()
+            let urlString = "https://api.openweathermap.org/data/2.5/forecast?"
+            let apikey = "5dfc577c1d7d94e9e23a00431582f1ac"
+            let count = "8"
+            let unit = "metric"
+            let parameters: Parameters = ["q": prefecture, "appid": apikey, "cnt": count, "units": unit]
+            let request = AF.request(urlString, parameters: parameters).responseDecodable(of: WeatherData.self, decoder: decoder) { response in
+                switch response.result {
+                case .success:
+                    if let weather = response.value {
+                        single(.success(weather))
+                    } else {
+                        single(.failure(NError.nilData))
+                    }
+                case .failure(let error):
+                    single(.failure(error))
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
+
+    
+    func fetchWeatherIcon(iconName: String) -> Single<Data>{
+        return Single.create { single in
+            let iconUrl = "https://openweathermap.org/img/wn/\(iconName).png"
+            let request = AF.request(iconUrl).response { response in
+                if let data = response.data {
+                    single(.success(data))
+                } else {
+                    single(.failure(NSError(domain: "", code: -1, userInfo: nil)))  // Error handling here
+                }
+            }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+}
+
+enum NError: Error {
+    case nilData
 }
