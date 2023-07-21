@@ -14,5 +14,4 @@ struct DisplayWeatherData {
     var maxTemparture: String
     var minTemparture: String
     var humidity:String
-    var pop: Double
 }

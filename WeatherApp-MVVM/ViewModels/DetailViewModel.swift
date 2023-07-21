@@ -115,7 +115,7 @@ class DetailViewModel {
         let pop = threeHourlyWeather.pop
         return weatherModel.fetchWeatherIcon(iconName: iconName) // Single<Data>で返ってくる
             .map { iconData in // map処理は
-                DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit, pop: pop)
+                DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
             }
     }
     
