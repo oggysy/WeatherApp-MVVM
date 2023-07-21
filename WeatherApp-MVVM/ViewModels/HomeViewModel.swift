@@ -13,12 +13,12 @@ import RxCoreLocation
 
 class HomeViewModel {
     
-    lazy var locationManager = CLLocationManager()
-    let locationSubject = PublishSubject<CLLocation>()
+    private lazy var locationManager = CLLocationManager()
+    private let locationSubject = PublishSubject<CLLocation>()
     var locationDriver: Driver<CLLocation> {
         return locationSubject.asDriver(onErrorJustReturn: CLLocation())
     }
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     init(locationButtonObservable: Signal<Void>){
         self.locationManager.requestWhenInUseAuthorization()

@@ -11,7 +11,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailViewController" customModule="WeatherApp_MVVM" customModuleProvider="target">
             <connections>
                 <outlet property="closeButton" destination="OMT-ZO-liO" id="WqI-a2-NRd"/>
+                <outlet property="dateLabel" destination="g0z-rl-pKp" id="ZU1-tj-HWD"/>
                 <outlet property="detailTableView" destination="emh-gX-i1A" id="hmA-Bl-ui5"/>
+                <outlet property="popChartView" destination="y6h-Xk-w9o" id="bEY-6K-Jff"/>
                 <outlet property="prefectureLabel" destination="Tvt-uo-mKJ" id="UCM-MZ-6WV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -63,7 +65,7 @@
                                 <constraint firstAttribute="trailing" secondItem="Tvt-uo-mKJ" secondAttribute="trailing" id="v9n-uw-7FL"/>
                             </constraints>
                         </stackView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y6h-Xk-w9o">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y6h-Xk-w9o" customClass="LineChartView" customModule="DGCharts">
                             <rect key="frame" x="0.0" y="93.5" width="414" height="265"/>
                             <color key="backgroundColor" systemColor="systemGray2Color"/>
                         </view>

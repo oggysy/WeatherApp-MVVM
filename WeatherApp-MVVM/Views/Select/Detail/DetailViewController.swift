@@ -9,6 +9,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Charts
+import DGCharts
 
 class DetailViewController: UIViewController {
     
@@ -16,8 +18,11 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var prefectureLabel: UILabel!
     @IBOutlet weak var detailTableView: UITableView!
     @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var popChartView: LineChartView!
+    @IBOutlet weak var dateLabel: UILabel!
     
-    var viewModel: DetailViewModel?
+    
+    public var viewModel: DetailViewModel?
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -41,13 +46,32 @@ class DetailViewController: UIViewController {
         )
         
         disposeBag.insert(
-            // viewModelのweatherDataにtableViewをバインド
-            viewModel.weatherDataDriver.drive(detailTableView.rx.items(dataSource: dataSource)),
-            Observable.just(()).bind(to: viewModel.fetchDataTrigger),
             closeButton.rx.tap.subscribe { _ in
                 self.dismiss(animated: true)
             },
-            viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text)
+            Observable.just(()).bind(to: viewModel.fetchDataTrigger),
+            viewModel.weatherDataDriver.drive(detailTableView.rx.items(dataSource: dataSource)),
+            viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text),
+            viewModel.chartDataDriver.drive(popChartView.rx.chartData),
+            viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
+            viewModel.todayDateDriver.drive(dateLabel.rx.text)
         )
+        displayChart()
     }
+    
+    
+    private func displayChart() {
+        popChartView.xAxis.granularity = 1
+        popChartView.highlightPerTapEnabled = false
+        popChartView.legend.enabled = false
+        popChartView.pinchZoomEnabled = false
+        popChartView.doubleTapToZoomEnabled = false
+        popChartView.leftAxis.axisMaximum = 100
+        popChartView.leftAxis.axisMinimum = 0
+        popChartView.leftAxis.labelCount = 6
+        popChartView.xAxis.labelPosition = .bottom
+        popChartView.rightAxis.enabled = false
+        popChartView.animate(xAxisDuration: 2)
+    }
+    
 }
