@@ -175,9 +175,9 @@
 			children = (
 				28302C9E2A56491D001FAD42 /* SelectViewController.swift */,
 				28302C9F2A56491D001FAD42 /* SelectViewController.xib */,
-				28302CB12A565F78001FAD42 /* Detail */,
 				28302CB92A568292001FAD42 /* SelectTableViewCell.swift */,
 				28302CBA2A568292001FAD42 /* SelectTableViewCell.xib */,
+				28302CB12A565F78001FAD42 /* Detail */,
 			);
 			path = Select;
 			sourceTree = "<group>";
