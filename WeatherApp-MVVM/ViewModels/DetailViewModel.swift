@@ -50,22 +50,24 @@ class DetailViewModel {
             if let prefecture = prefecture {
                 let request = weatherModel.setupRequest(prefecture: prefecture)
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
-            } else {
-                guard let location = location else { return }
+            } else if let location = location {
                 let request = weatherModel.setupRequest(location: location)
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
+            } else {
+                weatherDataSingle = Single.error(NilError.parameterUnSet("現在地も都道府県もセットされていません"))
+                return
             }
             weatherDataSingle
-             // API通信の結果がSingle<WeatherData>で返ってくる
+            // API通信の結果がSingle<WeatherData>で返ってくる
                 .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
-                    self.selectedPrefecture.onNext(data.city.name)
+                    self.selectedPrefecture.onNext(data.city.name) //　都市名の表示を反映
                     let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
                     return observable
                         .do(onNext: { threeHourlyWeather in // charts用に時間とpopデータを配列に追加
                             self.popArray.append(threeHourlyWeather.pop * 100)
                             self.timeArray.append(threeHourlyWeather.dt.changeTimeString())
                         })
-                        .flatMap { threeHourlyWeather in // Observableをflatmap(配列一つ一つに処理するため)
+                        .concatMap { threeHourlyWeather in // concatMapにして配列の順番通りに処理する
                             self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // DisplayDataに変換　返り値はSingle<DisplayWeatherData>(IconDataをAPI通信で取得しているため)
                         }
                         .toArray() //配列に戻す
@@ -125,12 +127,15 @@ class DetailViewModel {
         let minTemparture = String(format: "%.1f", threeHourlyWeather.main.temp_min)
         let humidit = String(threeHourlyWeather.main.humidity)
         let iconName = threeHourlyWeather.weather.first?.icon ?? ""
-
+        
         return weatherModel.fetchWeatherIcon(iconName: iconName) // Single<Data>で返ってくる
-            .map { iconData in // map処理は
+            .map { iconData in
                 DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
             }
     }
     
 }
 
+enum NilError: Error {
+    case parameterUnSet(String)
+}

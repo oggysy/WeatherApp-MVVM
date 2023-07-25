@@ -10,18 +10,19 @@ import Alamofire
 
 
 protocol WeatherRequest {
+    associatedtype ResponseType: Decodable
     
     var baseURL: String { get }
     var path: String { get }
     var parameters: Parameters { get set }
 }
 
-
 extension WeatherRequest {
     var baseURL: String { "https://api.openweathermap.org" }
 }
 
 struct WeatherRequestModel: WeatherRequest {
+    typealias ResponseType = WeatherData
     
     var path = "/data/2.5/forecast?"
     var parameters: Parameters = {
