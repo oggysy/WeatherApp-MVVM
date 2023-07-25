@@ -20,5 +20,4 @@ class SelectViewModel {
     var prefecturesDriver :Driver<[String]> {
         return prefectures.asDriver(onErrorJustReturn: ["都道府県を読み込みできませんでした"])
     }
-    private let disposeBag = DisposeBag()
 }

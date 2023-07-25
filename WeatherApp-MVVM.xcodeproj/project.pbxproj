@@ -28,10 +28,10 @@
 		28432C742A562B0B00C9A12E /* WeatherApp_MVVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C732A562B0B00C9A12E /* WeatherApp_MVVMTests.swift */; };
 		28432C7E2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C7D2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift */; };
 		28432C802A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */; };
-		28B1068B2A68272200E2166B /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = 28B1068A2A68272200E2166B /* AlamofireImage */; };
 		28B106982A6A26D500E2166B /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 28B106972A6A26D500E2166B /* DGCharts */; };
 		28B1069B2A6A427800E2166B /* TimeIntervarExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B1069A2A6A427800E2166B /* TimeIntervarExt.swift */; };
 		28B1069D2A6A42CE00E2166B /* ReactiveExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B1069C2A6A42CE00E2166B /* ReactiveExt.swift */; };
+		28B79B942A6E143600A6DE68 /* WeatherRecuest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */; };
 		28BB07412A601B670026AD24 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 28BB07402A601B670026AD24 /* RxDataSources */; };
 		28C28D502A5EAE16000F5B41 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C28D4F2A5EAE16000F5B41 /* DetailViewModel.swift */; };
 		28C780B42A57976300A69B02 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 28C780B32A57976300A69B02 /* RxCocoa */; };
@@ -88,6 +88,7 @@
 		28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp_MVVMUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		28B1069A2A6A427800E2166B /* TimeIntervarExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervarExt.swift; sourceTree = "<group>"; };
 		28B1069C2A6A42CE00E2166B /* ReactiveExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveExt.swift; sourceTree = "<group>"; };
+		28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRecuest.swift; sourceTree = "<group>"; };
 		28C28D4F2A5EAE16000F5B41 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		28C780B92A57CD6400A69B02 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
@@ -107,7 +108,6 @@
 				280CB5ED2A676DC700A0019C /* Alamofire in Frameworks */,
 				28C780B62A57976300A69B02 /* RxRelay in Frameworks */,
 				28C780B42A57976300A69B02 /* RxCocoa in Frameworks */,
-				28B1068B2A68272200E2166B /* AlamofireImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				28C780B92A57CD6400A69B02 /* WeatherData.swift */,
+				28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */,
 				280CB5EE2A679C9200A0019C /* SectionWeatherData.swift */,
 				280CB5F22A67DF3C00A0019C /* DisplayWeatherData.swift */,
 				28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */,
@@ -145,6 +146,7 @@
 				28302CB42A565FD9001FAD42 /* Splash */,
 				28302CB32A565F95001FAD42 /* Home */,
 				28302CB22A565F83001FAD42 /* Select */,
+				28302CB12A565F78001FAD42 /* Detail */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -177,7 +179,6 @@
 				28302C9F2A56491D001FAD42 /* SelectViewController.xib */,
 				28302CB92A568292001FAD42 /* SelectTableViewCell.swift */,
 				28302CBA2A568292001FAD42 /* SelectTableViewCell.xib */,
-				28302CB12A565F78001FAD42 /* Detail */,
 			);
 			path = Select;
 			sourceTree = "<group>";
@@ -284,7 +285,6 @@
 				28BB07402A601B670026AD24 /* RxDataSources */,
 				28D0DF6F2A60ECBD00139746 /* RxCoreLocation */,
 				280CB5EC2A676DC700A0019C /* Alamofire */,
-				28B1068A2A68272200E2166B /* AlamofireImage */,
 				28B106972A6A26D500E2166B /* DGCharts */,
 			);
 			productName = "WeatherApp-MVVM";
@@ -364,7 +364,6 @@
 				28BB073F2A601B670026AD24 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				28D0DF6E2A60ECBD00139746 /* XCRemoteSwiftPackageReference "RxCoreLocation" */,
 				280CB5EB2A676DC700A0019C /* XCRemoteSwiftPackageReference "Alamofire" */,
-				28B106892A68272200E2166B /* XCRemoteSwiftPackageReference "AlamofireImage" */,
 				28B106962A6A26D500E2166B /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 28432C5A2A562B0A00C9A12E /* Products */;
@@ -424,6 +423,7 @@
 				28432C5F2A562B0A00C9A12E /* SceneDelegate.swift in Sources */,
 				28302CA02A56491D001FAD42 /* SelectViewController.swift in Sources */,
 				28302C982A5648C9001FAD42 /* HomeViewController.swift in Sources */,
+				28B79B942A6E143600A6DE68 /* WeatherRecuest.swift in Sources */,
 				28B1069B2A6A427800E2166B /* TimeIntervarExt.swift in Sources */,
 				28D0DF6D2A60DFF400139746 /* HomeViewModel.swift in Sources */,
 				28302CAF2A565F52001FAD42 /* SplashViewContorller.swift in Sources */,
@@ -588,6 +588,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N2SYM75F37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WeatherApp-MVVM/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -614,6 +615,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N2SYM75F37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WeatherApp-MVVM/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -755,14 +757,6 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		28B106892A68272200E2166B /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/AlamofireImage";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
 		28B106962A6A26D500E2166B /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts";
@@ -802,11 +796,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 280CB5EB2A676DC700A0019C /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		28B1068A2A68272200E2166B /* AlamofireImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 28B106892A68272200E2166B /* XCRemoteSwiftPackageReference "AlamofireImage" */;
-			productName = AlamofireImage;
 		};
 		28B106972A6A26D500E2166B /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;

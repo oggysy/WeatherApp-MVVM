@@ -10,24 +10,34 @@ import UIKit
 import RxCocoa
 import RxSwift
 import Alamofire
-import AlamofireImage
+import CoreLocation
 
 protocol WeatherAPIProtcol {
-    func fetchWeatherData(at prefecture: String) -> Single<WeatherData>
+    func fetchWeatherData(request: WeatherRequestModel) -> Single<WeatherData>
     func fetchWeatherIcon(iconName: String) -> Single<Data>
+    func setupRequest(prefecture: String) -> WeatherRequestModel
+    func setupRequest(location: CLLocation) -> WeatherRequestModel
 }
 
 class APICaller: WeatherAPIProtcol {
     
-    func fetchWeatherData(at prefecture: String) -> Single<WeatherData> {
+    func setupRequest(prefecture: String) -> WeatherRequestModel {
+        var request = WeatherRequestModel()
+        request.parameters["q"] = prefecture
+        return request
+    }
+    
+    func setupRequest(location: CLLocation) -> WeatherRequestModel {
+        var request = WeatherRequestModel()
+        request.parameters["lat"] = String(location.coordinate.latitude)
+        request.parameters["lon"] = String(location.coordinate.longitude)
+        return request
+    }
+    
+    func fetchWeatherData(request: WeatherRequestModel) -> Single<WeatherData> {
         return Single<WeatherData>.create { single in
             let decoder = JSONDecoder()
-            let urlString = "https://api.openweathermap.org/data/2.5/forecast?"
-            let apikey = "5dfc577c1d7d94e9e23a00431582f1ac"
-            let count = "8"
-            let unit = "metric"
-            let parameters: Parameters = ["q": prefecture, "appid": apikey, "cnt": count, "units": unit]
-            let request = AF.request(urlString, parameters: parameters).responseDecodable(of: WeatherData.self, decoder: decoder) { response in
+            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters).responseDecodable(of: WeatherData.self, decoder: decoder) { response in
                 switch response.result {
                 case .success:
                     if let weather = response.value {
@@ -40,12 +50,11 @@ class APICaller: WeatherAPIProtcol {
                 }
             }
             return Disposables.create {
-                request.cancel()
+                weatherRequest.cancel()
             }
         }
     }
 
-    
     func fetchWeatherIcon(iconName: String) -> Single<Data>{
         return Single.create { single in
             let iconUrl = "https://openweathermap.org/img/wn/\(iconName).png"

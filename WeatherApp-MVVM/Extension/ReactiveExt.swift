@@ -21,8 +21,8 @@ extension Reactive where Base: LineChartView {
 
 extension Reactive where Base: XAxis {
     var valueFormatter: Binder<IndexAxisValueFormatter> {
-        return Binder(self.base) { view, formatter in
-            view.valueFormatter = formatter
+        return Binder(self.base) { xaxis, formatter in
+            xaxis.valueFormatter = formatter
         }
     }
 }

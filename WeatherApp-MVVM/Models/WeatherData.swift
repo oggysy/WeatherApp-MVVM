@@ -10,6 +10,7 @@ import RxDataSources
 
 struct WeatherData: Decodable {
     let list: [ThreeHourlyWeather]
+    let city: City
 }
 
 struct ThreeHourlyWeather: Decodable {
@@ -27,4 +28,8 @@ struct Main: Decodable {
 
 struct Weather: Decodable {
     let icon: String
+}
+
+struct City: Decodable {
+    let name: String
 }

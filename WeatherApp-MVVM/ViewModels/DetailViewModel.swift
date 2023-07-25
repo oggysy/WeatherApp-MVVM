@@ -10,10 +10,13 @@ import RxSwift
 import RxCocoa
 import Charts
 import DGCharts
+import CoreLocation
 
 class DetailViewModel {
     
-    var selectedPrefecture: BehaviorSubject<String>
+    var selectedPrefecture = BehaviorSubject<String>(value: "")
+    var currentLocation: CLLocation?
+    
     private let weatherData = BehaviorRelay<[SectionWeatherData]>(value: [])
     var weatherDataDriver: Driver<[SectionWeatherData]> {
         weatherData.asDriver()
@@ -37,15 +40,25 @@ class DetailViewModel {
     private let weatherModel: WeatherAPIProtcol
     private let disposeBag = DisposeBag()
     
-    
-    init(prefecture: String) {
-        self.selectedPrefecture = BehaviorSubject(value: prefecture)
+    init(prefecture: String? = nil, location: CLLocation? = nil) {
         weatherModel = APICaller()
         fetchDataTrigger.subscribe(onDisposed: { [weak self] in
             guard let self = self else { return }
             todayDate.onNext(getTodayDate()) //今日の日付を取得してtodayDateに通知しておく
-            try? self.weatherModel.fetchWeatherData(at: self.selectedPrefecture.value()) // API通信の結果がSingle<WeatherData>で返ってくる
+            // pregectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
+            let weatherDataSingle: Single<WeatherData>
+            if let prefecture = prefecture {
+                let request = weatherModel.setupRequest(prefecture: prefecture)
+                weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
+            } else {
+                guard let location = location else { return }
+                let request = weatherModel.setupRequest(location: location)
+                weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
+            }
+            weatherDataSingle
+             // API通信の結果がSingle<WeatherData>で返ってくる
                 .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
+                    self.selectedPrefecture.onNext(data.city.name)
                     let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
                     return observable
                         .do(onNext: { threeHourlyWeather in // charts用に時間とpopデータを配列に追加
@@ -112,7 +125,7 @@ class DetailViewModel {
         let minTemparture = String(format: "%.1f", threeHourlyWeather.main.temp_min)
         let humidit = String(threeHourlyWeather.main.humidity)
         let iconName = threeHourlyWeather.weather.first?.icon ?? ""
-        let pop = threeHourlyWeather.pop
+
         return weatherModel.fetchWeatherIcon(iconName: iconName) // Single<Data>で返ってくる
             .map { iconData in // map処理は
                 DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
