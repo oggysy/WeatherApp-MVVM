@@ -65,7 +65,7 @@ class DetailViewModel {
                             self.popArray.append(threeHourlyWeather.pop * 100)
                             self.timeArray.append(threeHourlyWeather.dt.changeTimeString())
                         })
-                        .flatMap { threeHourlyWeather in // Observableをflatmap(配列一つ一つに処理するため)
+                        .concatMap { threeHourlyWeather in // concatMapにして配列の順番通りに処理する
                             self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // DisplayDataに変換　返り値はSingle<DisplayWeatherData>(IconDataをAPI通信で取得しているため)
                         }
                         .toArray() //配列に戻す
