@@ -58,7 +58,7 @@ class DetailViewModel {
             weatherDataSingle
              // API通信の結果がSingle<WeatherData>で返ってくる
                 .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
-                    self.selectedPrefecture.onNext(data.city.name)
+                    self.selectedPrefecture.onNext(data.city.name) //　都市名の表示を反映
                     let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
                     return observable
                         .do(onNext: { threeHourlyWeather in // charts用に時間とpopデータを配列に追加
@@ -127,7 +127,7 @@ class DetailViewModel {
         let iconName = threeHourlyWeather.weather.first?.icon ?? ""
 
         return weatherModel.fetchWeatherIcon(iconName: iconName) // Single<Data>で返ってくる
-            .map { iconData in // map処理は
+            .map { iconData in
                 DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
             }
     }

@@ -13,7 +13,7 @@ import Alamofire
 import CoreLocation
 
 protocol WeatherAPIProtcol {
-    func fetchWeatherData(request: WeatherRequestModel) -> Single<WeatherData>
+    func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType>
     func fetchWeatherIcon(iconName: String) -> Single<Data>
     func setupRequest(prefecture: String) -> WeatherRequestModel
     func setupRequest(location: CLLocation) -> WeatherRequestModel
@@ -34,10 +34,10 @@ class APICaller: WeatherAPIProtcol {
         return request
     }
     
-    func fetchWeatherData(request: WeatherRequestModel) -> Single<WeatherData> {
-        return Single<WeatherData>.create { single in
+    func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType> {
+        return Single<req.ResponseType>.create { single in
             let decoder = JSONDecoder()
-            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters).responseDecodable(of: WeatherData.self, decoder: decoder) { response in
+            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters).responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
                 switch response.result {
                 case .success:
                     if let weather = response.value {
