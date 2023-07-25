@@ -8,22 +8,28 @@
 import Foundation
 import RxDataSources
 
-struct WeatherData {
-    var date: String
-    var weather: String
-    var highestTemperature: Double
-    var lowestTemperature: Double
-    var humidity: Int
+struct WeatherData: Decodable {
+    let list: [ThreeHourlyWeather]
+    let city: City
 }
 
-struct SectionWeatherData {
-    typealias Item = WeatherData
-    var header: String
-    var items: [Item]
+struct ThreeHourlyWeather: Decodable {
+    let dt: TimeInterval
+    let main: Main
+    let weather: [Weather]
+    let pop: Double
 }
-extension SectionWeatherData: SectionModelType {
-    init(original: SectionWeatherData, items: [Item]) {
-        self = original
-        self.items = items
-    }
+
+struct Main: Decodable {
+    let temp_max: Double
+    let temp_min: Double
+    let humidity: Int
+}
+
+struct Weather: Decodable {
+    let icon: String
+}
+
+struct City: Decodable {
+    let name: String
 }

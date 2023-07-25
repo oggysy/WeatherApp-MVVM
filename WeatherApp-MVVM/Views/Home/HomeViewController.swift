@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
         // ベルボタンタップの処理を後で実装
     }
     
-    func setUpNavigationBar() {
+    private func setUpNavigationBar() {
         navigationItem.hidesBackButton = true
         navigationItem.title = "Home"
         let navBarAppearance = {
@@ -45,15 +45,14 @@ class HomeViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightButton
     }
     
-    func setUpButtonAction() {
+    private func setUpButtonAction() {
         disposeBag.insert(
             selectButton.rx.tap.asSignal().emit { [weak self] _ in
                 self?.navigationController?.pushViewController(SelectViewController(), animated: true)
             },
             viewModel.locationDriver.drive(onNext: { newLocation in
-                print(newLocation)
                 let vc = DetailViewController()
-                vc.viewModel = DetailViewModel(prefecture: "東京都") //仮で東京都を入れている
+                vc.viewModel = DetailViewModel(location: newLocation)
                 self.present(vc, animated: true)
             })
         )

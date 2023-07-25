@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		280CB5ED2A676DC700A0019C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 280CB5EC2A676DC700A0019C /* Alamofire */; };
+		280CB5EF2A679C9200A0019C /* SectionWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB5EE2A679C9200A0019C /* SectionWeatherData.swift */; };
+		280CB5F32A67DF3C00A0019C /* DisplayWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB5F22A67DF3C00A0019C /* DisplayWeatherData.swift */; };
 		28302C982A5648C9001FAD42 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302C962A5648C9001FAD42 /* HomeViewController.swift */; };
 		28302C992A5648C9001FAD42 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28302C972A5648C9001FAD42 /* HomeViewController.xib */; };
 		28302C9C2A5648FC001FAD42 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302C9A2A5648FC001FAD42 /* DetailViewController.swift */; };
@@ -25,6 +28,10 @@
 		28432C742A562B0B00C9A12E /* WeatherApp_MVVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C732A562B0B00C9A12E /* WeatherApp_MVVMTests.swift */; };
 		28432C7E2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C7D2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift */; };
 		28432C802A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */; };
+		28B106982A6A26D500E2166B /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 28B106972A6A26D500E2166B /* DGCharts */; };
+		28B1069B2A6A427800E2166B /* TimeIntervarExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B1069A2A6A427800E2166B /* TimeIntervarExt.swift */; };
+		28B1069D2A6A42CE00E2166B /* ReactiveExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B1069C2A6A42CE00E2166B /* ReactiveExt.swift */; };
+		28B79B942A6E143600A6DE68 /* WeatherRecuest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */; };
 		28BB07412A601B670026AD24 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 28BB07402A601B670026AD24 /* RxDataSources */; };
 		28C28D502A5EAE16000F5B41 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C28D4F2A5EAE16000F5B41 /* DetailViewModel.swift */; };
 		28C780B42A57976300A69B02 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 28C780B32A57976300A69B02 /* RxCocoa */; };
@@ -55,6 +62,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		280CB5EE2A679C9200A0019C /* SectionWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionWeatherData.swift; sourceTree = "<group>"; };
+		280CB5F22A67DF3C00A0019C /* DisplayWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayWeatherData.swift; sourceTree = "<group>"; };
 		28302C962A5648C9001FAD42 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		28302C972A5648C9001FAD42 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		28302C9A2A5648FC001FAD42 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +86,9 @@
 		28432C792A562B0B00C9A12E /* WeatherApp-MVVMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WeatherApp-MVVMUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28432C7D2A562B0B00C9A12E /* WeatherApp_MVVMUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp_MVVMUITests.swift; sourceTree = "<group>"; };
 		28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp_MVVMUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		28B1069A2A6A427800E2166B /* TimeIntervarExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervarExt.swift; sourceTree = "<group>"; };
+		28B1069C2A6A42CE00E2166B /* ReactiveExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveExt.swift; sourceTree = "<group>"; };
+		28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRecuest.swift; sourceTree = "<group>"; };
 		28C28D4F2A5EAE16000F5B41 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		28C780B92A57CD6400A69B02 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
@@ -89,9 +101,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28B106982A6A26D500E2166B /* DGCharts in Frameworks */,
 				28C780B82A57976300A69B02 /* RxSwift in Frameworks */,
 				28BB07412A601B670026AD24 /* RxDataSources in Frameworks */,
 				28D0DF702A60ECBD00139746 /* RxCoreLocation in Frameworks */,
+				280CB5ED2A676DC700A0019C /* Alamofire in Frameworks */,
 				28C780B62A57976300A69B02 /* RxRelay in Frameworks */,
 				28C780B42A57976300A69B02 /* RxCocoa in Frameworks */,
 			);
@@ -118,6 +132,9 @@
 			isa = PBXGroup;
 			children = (
 				28C780B92A57CD6400A69B02 /* WeatherData.swift */,
+				28B79B932A6E143600A6DE68 /* WeatherRecuest.swift */,
+				280CB5EE2A679C9200A0019C /* SectionWeatherData.swift */,
+				280CB5F22A67DF3C00A0019C /* DisplayWeatherData.swift */,
 				28CC00ED2A5F7DA500EA1C3B /* APICaller.swift */,
 			);
 			path = Models;
@@ -207,6 +224,7 @@
 		28432C5B2A562B0A00C9A12E /* WeatherApp-MVVM */ = {
 			isa = PBXGroup;
 			children = (
+				28B106992A6A425700E2166B /* Extension */,
 				28302CAC2A565BEE001FAD42 /* ViewModels */,
 				28302CAB2A565BD4001FAD42 /* Views */,
 				28302CAA2A565BCA001FAD42 /* Models */,
@@ -235,6 +253,15 @@
 			path = "WeatherApp-MVVMUITests";
 			sourceTree = "<group>";
 		};
+		28B106992A6A425700E2166B /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				28B1069A2A6A427800E2166B /* TimeIntervarExt.swift */,
+				28B1069C2A6A42CE00E2166B /* ReactiveExt.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -257,6 +284,8 @@
 				28C780B72A57976300A69B02 /* RxSwift */,
 				28BB07402A601B670026AD24 /* RxDataSources */,
 				28D0DF6F2A60ECBD00139746 /* RxCoreLocation */,
+				280CB5EC2A676DC700A0019C /* Alamofire */,
+				28B106972A6A26D500E2166B /* DGCharts */,
 			);
 			productName = "WeatherApp-MVVM";
 			productReference = 28432C592A562B0A00C9A12E /* WeatherApp-MVVM.app */;
@@ -334,6 +363,8 @@
 				28C780B22A57976300A69B02 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				28BB073F2A601B670026AD24 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				28D0DF6E2A60ECBD00139746 /* XCRemoteSwiftPackageReference "RxCoreLocation" */,
+				280CB5EB2A676DC700A0019C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				28B106962A6A26D500E2166B /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 28432C5A2A562B0A00C9A12E /* Products */;
 			projectDirPath = "";
@@ -382,16 +413,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				280CB5F32A67DF3C00A0019C /* DisplayWeatherData.swift in Sources */,
 				28CC00F02A5F901700EA1C3B /* SelectViewModel.swift in Sources */,
 				28432C5D2A562B0A00C9A12E /* AppDelegate.swift in Sources */,
 				28302C9C2A5648FC001FAD42 /* DetailViewController.swift in Sources */,
+				28B1069D2A6A42CE00E2166B /* ReactiveExt.swift in Sources */,
 				28302CBF2A568A14001FAD42 /* DetailTableViewCell.swift in Sources */,
 				28C28D502A5EAE16000F5B41 /* DetailViewModel.swift in Sources */,
 				28432C5F2A562B0A00C9A12E /* SceneDelegate.swift in Sources */,
 				28302CA02A56491D001FAD42 /* SelectViewController.swift in Sources */,
 				28302C982A5648C9001FAD42 /* HomeViewController.swift in Sources */,
+				28B79B942A6E143600A6DE68 /* WeatherRecuest.swift in Sources */,
+				28B1069B2A6A427800E2166B /* TimeIntervarExt.swift in Sources */,
 				28D0DF6D2A60DFF400139746 /* HomeViewModel.swift in Sources */,
 				28302CAF2A565F52001FAD42 /* SplashViewContorller.swift in Sources */,
+				280CB5EF2A679C9200A0019C /* SectionWeatherData.swift in Sources */,
 				28CC00EE2A5F7DA500EA1C3B /* APICaller.swift in Sources */,
 				28C780BA2A57CD6400A69B02 /* WeatherData.swift in Sources */,
 				28302CBB2A568292001FAD42 /* SelectTableViewCell.swift in Sources */,
@@ -552,6 +588,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N2SYM75F37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WeatherApp-MVVM/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -578,6 +615,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N2SYM75F37;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WeatherApp-MVVM/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -711,6 +749,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		280CB5EB2A676DC700A0019C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		28B106962A6A26D500E2166B /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		28BB073F2A601B670026AD24 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
@@ -738,6 +792,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		280CB5EC2A676DC700A0019C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 280CB5EB2A676DC700A0019C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		28B106972A6A26D500E2166B /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28B106962A6A26D500E2166B /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
+		};
 		28BB07402A601B670026AD24 /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 28BB073F2A601B670026AD24 /* XCRemoteSwiftPackageReference "RxDataSources" */;
