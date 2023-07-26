@@ -24,12 +24,20 @@ class DetailViewController: UIViewController {
     
     public var viewModel: DetailViewModel?
     private let disposeBag = DisposeBag()
-    private let loadingView: UIActivityIndicatorView = {
+    private let loadingView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        indicator.hidesWhenStopped = true
-        return indicator
+        view.addSubview(indicator)
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        view.addSubview(indicator)
+        return view
     }()
     
     override func viewDidLoad() {
@@ -63,7 +71,11 @@ class DetailViewController: UIViewController {
             viewModel.chartDataDriver.drive(popChartView.rx.chartData),
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
             viewModel.todayDateDriver.drive(dateLabel.rx.text),
-            viewModel.isLoading.bind(to: loadingView.rx.isAnimating)
+            viewModel.isLoading
+                        .bind(to: (loadingView.subviews.first as? UIActivityIndicatorView)?.rx.isAnimating ?? UIActivityIndicatorView().rx.isAnimating),
+            viewModel.isLoading
+                        .map { !($0) }
+                        .bind(to: loadingView.rx.isHidden)
         )
         displayChart()
     }
