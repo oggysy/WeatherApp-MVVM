@@ -24,26 +24,12 @@ class DetailViewController: UIViewController {
     
     public var viewModel: DetailViewModel?
     private let disposeBag = DisposeBag()
-    private let loadingView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(indicator)
-        NSLayoutConstraint.activate([
-            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-        view.addSubview(indicator)
-        return view
-    }()
+    private let loadingView = LoadingView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let viewModel = viewModel else { return }
-        setupLoadingView()
+        loadingView.setFillSuperview(for: view)
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
         
         let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
@@ -92,16 +78,5 @@ class DetailViewController: UIViewController {
         popChartView.xAxis.labelPosition = .bottom
         popChartView.rightAxis.enabled = false
         popChartView.animate(xAxisDuration: 2)
-    }
-    
-    
-    private func setupLoadingView() {
-        view.addSubview(loadingView)
-        NSLayoutConstraint.activate([
-            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
     }
 }
