@@ -27,7 +27,7 @@ class HomeViewModel {
     }
     
     init(locationButtonObservable: Signal<Void>){
-//        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
         disposeBag.insert(
             locationButtonObservable.emit(onNext: { _ in
                 guard let status = self.locationAuthorizationStatus else { return }
