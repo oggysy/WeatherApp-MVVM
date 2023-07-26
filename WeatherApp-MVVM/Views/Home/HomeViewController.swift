@@ -54,9 +54,22 @@ class HomeViewController: UIViewController {
                 let vc = DetailViewController()
                 vc.viewModel = DetailViewModel(location: newLocation)
                 self.present(vc, animated: true)
+            }),
+            viewModel.locationErrorMessageDriver.drive(onNext: { message in
+                self.showGPSAlert(message: message)
             })
         )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         currentLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+    }
+    private func showGPSAlert(message: String) {
+        let alert = UIAlertController(title: "GPSがオフです", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "設定", style: .default, handler: { _ in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }))
+        present(alert, animated: true, completion: nil)
     }
 }

@@ -20,13 +20,26 @@ class HomeViewModel {
     }
     private let disposeBag = DisposeBag()
     private var didUpdateLocation = false //更新処理のフラグ
+    private var locationAuthorizationStatus: CLAuthorizationStatus?
+    private var locationErrorMessage = PublishRelay<String>()
+    var locationErrorMessageDriver: Driver<String> {
+        return locationErrorMessage.asDriver(onErrorJustReturn: "")
+    }
     
     init(locationButtonObservable: Signal<Void>){
         self.locationManager.requestWhenInUseAuthorization()
         disposeBag.insert(
             locationButtonObservable.emit(onNext: { _ in
-                self.locationManager.startUpdatingLocation()
-                self.didUpdateLocation = false
+                guard let status = self.locationAuthorizationStatus else { return }
+                switch status {
+                case .authorizedAlways, .authorizedWhenInUse:
+                    self.locationManager.startUpdatingLocation()
+                    self.didUpdateLocation = false
+                case .denied:
+                    self.locationErrorMessage.accept("現在地を取得するにはGPSをオンにしてください")
+                default:
+                    print("locationManagerの不明なエラー")
+                }
             }),
             locationManager.rx
                 .location
@@ -39,7 +52,23 @@ class HomeViewModel {
                         self.didUpdateLocation = true
                     }
                     
-                })
+                }),
+            locationManager.rx.didChangeAuthorization.subscribe(onNext: { _, status in
+                switch status {
+                case .denied:
+                    self.locationAuthorizationStatus = .denied
+                case .notDetermined:
+                    self.locationAuthorizationStatus = .notDetermined
+                case .restricted:
+                    self.locationAuthorizationStatus = .restricted
+                case .authorizedAlways:
+                    self.locationAuthorizationStatus = .authorizedAlways
+                case .authorizedWhenInUse:
+                    self.locationAuthorizationStatus = .authorizedWhenInUse
+                default:
+                    print("unknownError")
+                }
+            })
         )
     }
 }
