@@ -27,13 +27,15 @@ class HomeViewModel {
     }
     
     init(locationButtonObservable: Signal<Void>){
-        self.locationManager.requestWhenInUseAuthorization()
+//        self.locationManager.requestWhenInUseAuthorization()
         disposeBag.insert(
             locationButtonObservable.emit(onNext: { _ in
                 guard let status = self.locationAuthorizationStatus else { return }
                 switch status {
                 case .denied:
                     self.locationErrorMessage.accept("現在地を取得するにはGPSをオンにしてください")
+                case .notDetermined:
+                    self.locationManager.requestWhenInUseAuthorization()
                 case .authorizedAlways, .authorizedWhenInUse:
                     self.locationManager.startUpdatingLocation()
                     self.didUpdateLocation = false
@@ -58,6 +60,8 @@ class HomeViewModel {
                 switch status {
                 case .denied:
                     self.locationAuthorizationStatus = .denied
+                case .notDetermined:
+                    self.locationAuthorizationStatus = .notDetermined
                 case .authorizedAlways:
                     self.locationAuthorizationStatus = .authorizedAlways
                 case .authorizedWhenInUse:
