@@ -43,9 +43,11 @@ class HomeViewModel {
             }),
             locationManager.rx
                 .location
-                .compactMap { $0 }
                 .subscribe(onNext: { [weak self] newLocation in
                     guard let self = self else { return }
+                    guard let newLocation = newLocation else {
+                        self.locationErrorMessage.accept("位置情報の取得に失敗しました")
+                        return }
                     if !self.didUpdateLocation {
                         self.locationSubject.onNext(newLocation)
                         self.locationManager.stopUpdatingLocation()  // 位置情報の取得を停止する
@@ -66,7 +68,7 @@ class HomeViewModel {
                 case .authorizedWhenInUse:
                     self.locationAuthorizationStatus = .authorizedWhenInUse
                 default:
-                    print("unknownError")
+                    print("locationManagerの不明なエラー")
                 }
             })
         )

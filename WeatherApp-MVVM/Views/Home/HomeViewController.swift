@@ -65,11 +65,13 @@ class HomeViewController: UIViewController {
     private func showGPSAlert(message: String) {
         let alert = UIAlertController(title: "GPSがオフです", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "設定", style: .default, handler: { _ in
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }))
+        if message == "現在地を取得するにはGPSをオンにしてください" {
+            alert.addAction(UIAlertAction(title: "設定", style: .default, handler: { _ in
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                }))
+        }
         present(alert, animated: true, completion: nil)
     }
 }
