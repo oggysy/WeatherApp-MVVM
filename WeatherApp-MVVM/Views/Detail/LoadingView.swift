@@ -10,7 +10,7 @@ import UIKit
 
 
 class LoadingView: UIView {
-    let indicator: UIActivityIndicatorView
+    public let indicator: UIActivityIndicatorView // 使用する側から指定できるようにプロパティで持つ
     
     init() {
         indicator = UIActivityIndicatorView(style: .large)

@@ -58,7 +58,7 @@ class DetailViewController: UIViewController {
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
             viewModel.todayDateDriver.drive(dateLabel.rx.text),
             viewModel.isLoading
-                        .bind(to: (loadingView.subviews.first as? UIActivityIndicatorView)?.rx.isAnimating ?? UIActivityIndicatorView().rx.isAnimating),
+                .bind(to: loadingView.indicator.rx.isAnimating),
             viewModel.isLoading
                         .map { !($0) }
                         .bind(to: loadingView.rx.isHidden)
