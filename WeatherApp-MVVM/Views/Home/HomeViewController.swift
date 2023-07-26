@@ -67,10 +67,10 @@ class HomeViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
         if message == "現在地を取得するにはGPSをオンにしてください" {
             alert.addAction(UIAlertAction(title: "設定", style: .default, handler: { _ in
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                    }
-                }))
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }))
         }
         present(alert, animated: true, completion: nil)
     }
