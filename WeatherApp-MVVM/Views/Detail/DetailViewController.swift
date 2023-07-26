@@ -24,10 +24,17 @@ class DetailViewController: UIViewController {
     
     public var viewModel: DetailViewModel?
     private let disposeBag = DisposeBag()
+    private let loadingView: UIActivityIndicatorView = {
+            let indicator = UIActivityIndicatorView(style: .large)
+            indicator.translatesAutoresizingMaskIntoConstraints = false
+            indicator.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+            return indicator
+        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let viewModel = viewModel else { return }
+        setupLoadingView()
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
         
         let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
@@ -54,11 +61,14 @@ class DetailViewController: UIViewController {
             viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text),
             viewModel.chartDataDriver.drive(popChartView.rx.chartData),
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
-            viewModel.todayDateDriver.drive(dateLabel.rx.text)
+            viewModel.todayDateDriver.drive(dateLabel.rx.text),
+            viewModel.isLoading.bind(to: loadingView.rx.isAnimating),
+            viewModel.isLoading
+                        .map { !($0) }
+                        .bind(to: loadingView.rx.isHidden)
         )
         displayChart()
     }
-    
     
     private func displayChart() {
         popChartView.xAxis.granularity = 1
@@ -74,4 +84,14 @@ class DetailViewController: UIViewController {
         popChartView.animate(xAxisDuration: 2)
     }
     
+    
+    private func setupLoadingView() {
+           view.addSubview(loadingView)
+           NSLayoutConstraint.activate([
+               loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+               loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+               loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+               loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+           ])
+       }
 }

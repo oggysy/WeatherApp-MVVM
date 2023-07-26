@@ -36,11 +36,14 @@ class DetailViewModel {
         todayDate.asDriver(onErrorJustReturn: "")
     }
     
+    let isLoading = BehaviorRelay(value: false)
+    
     let fetchDataTrigger = PublishSubject<Void>()
     private let weatherModel: WeatherAPIProtcol
     private let disposeBag = DisposeBag()
     
     init(prefecture: String? = nil, location: CLLocation? = nil) {
+        isLoading.accept(true) // indicatorを開始
         weatherModel = APICaller()
         fetchDataTrigger.subscribe(onDisposed: { [weak self] in
             guard let self = self else { return }
@@ -75,6 +78,7 @@ class DetailViewModel {
                 .subscribe(onSuccess: { displayData in // ここでの結果はfetchWeatherDataのsuccessかfailureが返ってくるためエラー分岐できる
                     let sectionData = self.changeToSectionWeatherData(weatherData: displayData) // SectionWeatherDataに変換処理
                     self.weatherData.accept(sectionData)
+                    self.isLoading.accept(false) //indicatorを停止
                 }, onFailure: { error in
                     print(error)
                 })
