@@ -47,6 +47,8 @@ class DetailViewController: UIViewController {
             }
         )
         
+        let sharedIsLoading = viewModel.isLoading.share() //複数のviewからバインドされているのでshareにする
+        
         disposeBag.insert(
             closeButton.rx.tap.subscribe { _ in
                 self.dismiss(animated: true)
@@ -57,9 +59,9 @@ class DetailViewController: UIViewController {
             viewModel.chartDataDriver.drive(popChartView.rx.chartData),
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
             viewModel.todayDateDriver.drive(dateLabel.rx.text),
-            viewModel.isLoading.bind(to: loadingView.indicator.rx.isAnimating),
-            viewModel.isLoading.map { !($0) }.bind(to: loadingView.rx.isHidden),
-            viewModel.isLoading.map { !($0) }.bind(to: view.rx.isUserInteractionEnabled)
+            sharedIsLoading.bind(to: loadingView.indicator.rx.isAnimating),
+            sharedIsLoading.map { !($0) }.bind(to: loadingView.rx.isHidden),
+            sharedIsLoading.map { !($0) }.bind(to: view.rx.isUserInteractionEnabled)
         )
         displayChart()
     }
