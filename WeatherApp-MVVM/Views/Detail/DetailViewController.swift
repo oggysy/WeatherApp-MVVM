@@ -57,11 +57,9 @@ class DetailViewController: UIViewController {
             viewModel.chartDataDriver.drive(popChartView.rx.chartData),
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
             viewModel.todayDateDriver.drive(dateLabel.rx.text),
-            viewModel.isLoading
-                .bind(to: loadingView.indicator.rx.isAnimating),
-            viewModel.isLoading
-                        .map { !($0) }
-                        .bind(to: loadingView.rx.isHidden)
+            viewModel.isLoading.bind(to: loadingView.indicator.rx.isAnimating),
+            viewModel.isLoading.map { !($0) }.bind(to: loadingView.rx.isHidden),
+            viewModel.isLoading.map { !($0) }.bind(to: view.rx.isUserInteractionEnabled)
         )
         displayChart()
     }

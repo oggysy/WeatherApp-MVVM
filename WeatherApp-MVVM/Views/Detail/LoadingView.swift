@@ -37,6 +37,7 @@ class LoadingView: UIView {
     public func setFillSuperview(for view: UIView) {
         view.addSubview(self)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
