@@ -37,13 +37,14 @@ class APICaller: WeatherAPIProtcol {
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType> {
         return Single<req.ResponseType>.create { single in
             let decoder = JSONDecoder()
-            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters).responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
+            // AF.requestでタイムアウト8秒、statusCode200番以外は.responseValidationFailedエラーで返すを設定
+            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters, requestModifier: { $0.timeoutInterval = 8.0 }).validate(statusCode:  200..<300).responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
                 switch response.result {
                 case .success:
                     if let weather = response.value {
                         single(.success(weather))
                     } else {
-                        single(.failure(NError.nilData))
+                        single(.failure(ResponseError.nilData))
                     }
                 case .failure(let error):
                     single(.failure(error))
@@ -54,7 +55,7 @@ class APICaller: WeatherAPIProtcol {
             }
         }
     }
-
+    
     func fetchWeatherIcon(iconName: String) -> Single<Data>{
         return Single.create { single in
             let iconUrl = "https://openweathermap.org/img/wn/\(iconName).png"
@@ -72,6 +73,6 @@ class APICaller: WeatherAPIProtcol {
     }
 }
 
-enum NError: Error {
+enum ResponseError: Error {
     case nilData
 }

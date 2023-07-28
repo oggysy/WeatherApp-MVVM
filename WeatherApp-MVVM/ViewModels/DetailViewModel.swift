@@ -11,6 +11,7 @@ import RxCocoa
 import Charts
 import DGCharts
 import CoreLocation
+import Alamofire
 
 class DetailViewModel {
     
@@ -40,6 +41,10 @@ class DetailViewModel {
     var isLoadingDriver: Driver<Bool> {
         isLoading.asDriver()
     }
+    private var APIErrorMessage = PublishRelay<String>()
+    var APIErrorMessageDriver: Driver<String> {
+        return APIErrorMessage.asDriver(onErrorJustReturn: "")
+    }
     
     let fetchDataTrigger = PublishSubject<Void>()
     private let weatherModel: WeatherAPIProtcol
@@ -54,7 +59,7 @@ class DetailViewModel {
                 return
             }
             todayDate.onNext(getTodayDate()) //今日の日付を取得してtodayDateに通知しておく
-            // pregectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
+            // prefectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
             let weatherDataSingle: Single<WeatherData>
             if let prefecture = prefecture {
                 let request = weatherModel.setupRequest(prefecture: prefecture)
@@ -63,10 +68,9 @@ class DetailViewModel {
                 let request = weatherModel.setupRequest(location: location)
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
             } else {
-                weatherDataSingle = Single.error(NilError.parameterUnSet("現在地も都道府県もセットされていません"))
+                weatherDataSingle = Single.error(ParameterError.parameterUnSet("現在地も都道府県もセットされていません"))
             }
-            weatherDataSingle
-            // API通信の結果がSingle<WeatherData>で返ってくる
+            weatherDataSingle // API通信の結果がSingle<WeatherData>で返ってくる
                 .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
                     self.selectedPrefecture.onNext(data.city.name) //　都市名の表示を反映
                     let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
@@ -85,8 +89,56 @@ class DetailViewModel {
                     self.weatherData.accept(sectionData)
                     self.isLoading.accept(false) //indicatorを停止
                 }, onFailure: { error in
-                    print(error)
-                    self.isLoading.accept(false)
+                    self.isLoading.accept(false) //エラーの場合もindicatorを停止
+                    if let afError = error as? AFError {
+                        switch afError {
+                            // Sessionエラーを検知
+                        case .sessionTaskFailed(error: let sessionError):
+                            if let urlError = sessionError as? URLError {
+                                switch urlError.code {
+                                case .notConnectedToInternet:
+                                    self.APIErrorMessage.accept("ネットワークに接続できませんでした")
+                                case .timedOut:
+                                    self.APIErrorMessage.accept("タイムアウトしました")
+                                default :
+                                    print("SessionError　Other Error")
+                                }
+                            } else {
+                                print("SessionTaskFailed　Other Error")
+                            }
+
+                            // status codeが200番台以外を検知
+                        case .responseValidationFailed(reason: let reason):
+                            switch reason {
+                            case .unacceptableStatusCode(code: let code):
+                                if code >= 400 && code < 600 {
+                                    self.APIErrorMessage.accept("データの取得に失敗しました")
+                                }
+                            default :
+                                print("Response Validation Other Error")
+                            }
+                            
+                            // レスポンスエラー(主にデコードエラーを検知)
+                        case .responseSerializationFailed(reason: let reason) :
+                            switch reason {
+                            case .decodingFailed:
+                                self.APIErrorMessage.accept("デコードに失敗しました")
+                            default:
+                                print("Response Other Error: \(error)")
+                            }
+                        default :
+                            print("Other Error: \(error)")
+                        }
+                    }
+                    else if let responceError = error as? ResponseError {
+                        switch responceError {
+                        case .nilData:
+                            self.APIErrorMessage.accept("データの取得に失敗しました")
+                        }
+                    }
+                    else {
+                        print("不明なエラー\(error)")
+                    }
                 })
                 .disposed(by: disposeBag)
         }).disposed(by: disposeBag)
@@ -146,6 +198,6 @@ class DetailViewModel {
     
 }
 
-enum NilError: Error {
+enum ParameterError: Error {
     case parameterUnSet(String)
 }

@@ -59,7 +59,19 @@ class DetailViewController: UIViewController {
             viewModel.todayDateDriver.drive(dateLabel.rx.text),
             viewModel.isLoadingDriver.drive(loadingView.indicator.rx.isAnimating),
             viewModel.isLoadingDriver.map { !($0) }.drive(loadingView.rx.isHidden),
-            viewModel.isLoadingDriver.map { !($0) }.drive(view.rx.isUserInteractionEnabled)
+            viewModel.isLoadingDriver.map { !($0) }.drive(view.rx.isUserInteractionEnabled),
+            viewModel.isLoading
+                .bind(to: loadingView.indicator.rx.isAnimating),
+            viewModel.isLoading
+                        .map { !($0) }
+                        .bind(to: loadingView.rx.isHidden),
+            viewModel.APIErrorMessageDriver.drive(onNext: { message in
+                let alert = UIAlertController(title: "エラー", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: { _ in
+                    self.dismiss(animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            })
         )
         displayChart()
     }

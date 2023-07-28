@@ -33,3 +33,19 @@ struct WeatherRequestModel: WeatherRequest {
         return (["appid": apikey, "cnt": count, "units": unit, "lang": lang])
     }()
 }
+
+
+struct ErrorRequestModel: WeatherRequest {
+    typealias ResponseType = WeatherData
+
+    var path = "/data/2.5/forecast?"
+    var parameters: Parameters = {
+        let apikey = "error"
+        let count = "8"
+        let unit = "metric"
+        let lang = "ja"
+        return (["appid": apikey, "cnt": count, "units": unit, "lang": lang])
+    }()
+    
+    
+}
