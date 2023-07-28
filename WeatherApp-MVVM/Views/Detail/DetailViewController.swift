@@ -24,10 +24,12 @@ class DetailViewController: UIViewController {
     
     public var viewModel: DetailViewModel?
     private let disposeBag = DisposeBag()
+    private let loadingView = LoadingView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let viewModel = viewModel else { return }
+        loadingView.setFillSuperview(for: view)
         detailTableView.register(UINib(nibName: "DetailTableViewCell", bundle: nil), forCellReuseIdentifier: "DetailTableViewCell")
         
         let dataSource = RxTableViewSectionedReloadDataSource<SectionWeatherData>(
@@ -54,11 +56,13 @@ class DetailViewController: UIViewController {
             viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text),
             viewModel.chartDataDriver.drive(popChartView.rx.chartData),
             viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
-            viewModel.todayDateDriver.drive(dateLabel.rx.text)
+            viewModel.todayDateDriver.drive(dateLabel.rx.text),
+            viewModel.isLoadingDriver.drive(loadingView.indicator.rx.isAnimating),
+            viewModel.isLoadingDriver.map { !($0) }.drive(loadingView.rx.isHidden),
+            viewModel.isLoadingDriver.map { !($0) }.drive(view.rx.isUserInteractionEnabled)
         )
         displayChart()
     }
-    
     
     private func displayChart() {
         popChartView.xAxis.granularity = 1
@@ -73,5 +77,4 @@ class DetailViewController: UIViewController {
         popChartView.rightAxis.enabled = false
         popChartView.animate(xAxisDuration: 2)
     }
-    
 }
