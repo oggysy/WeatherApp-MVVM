@@ -101,10 +101,10 @@ class DetailViewModel {
                                 case .timedOut:
                                     self.APIErrorMessage.accept("タイムアウトしました")
                                 default :
-                                    print("SessionError　Other Error")
+                                    print("URLError　Other Error: \(urlError.localizedDescription)")
                                 }
                             } else {
-                                print("SessionTaskFailed　Other Error")
+                                print("SessionTaskFailed　Other Error: \(sessionError)")
                             }
 
                             // status codeが200番台以外を検知
@@ -124,10 +124,10 @@ class DetailViewModel {
                             case .decodingFailed:
                                 self.APIErrorMessage.accept("デコードに失敗しました")
                             default:
-                                print("Response Other Error: \(error)")
+                                print("Response Other Error")
                             }
                         default :
-                            print("Other Error: \(error)")
+                            print("Other AFError: \(afError)")
                         }
                     }
                     else if let responceError = error as? ResponseError {
@@ -137,7 +137,7 @@ class DetailViewModel {
                         }
                     }
                     else {
-                        print("不明なエラー\(error)")
+                        print("Other Error: \(error)")
                     }
                 })
                 .disposed(by: disposeBag)
