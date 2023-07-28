@@ -14,7 +14,7 @@ import CoreLocation
 
 protocol WeatherAPIProtcol {
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType>
-    func fetchWeatherIcon(iconName: String) -> Single<Data>
+    func fetchWeatherIcon(iconName: String) -> Single<Data?>
     func setupRequest(prefecture: String) -> WeatherRequestModel
     func setupRequest(location: CLLocation) -> WeatherRequestModel
 }
@@ -56,15 +56,11 @@ class APICaller: WeatherAPIProtcol {
         }
     }
     
-    func fetchWeatherIcon(iconName: String) -> Single<Data>{
+    func fetchWeatherIcon(iconName: String) -> Single<Data?>{
         return Single.create { single in
             let iconUrl = "https://openweathermap.org/img/wn/\(iconName).png"
             let request = AF.request(iconUrl).response { response in
-                if let data = response.data {
-                    single(.success(data))
-                } else {
-                    single(.failure(NSError(domain: "", code: -1, userInfo: nil)))  // Error handling here
-                }
+                single(.success(response.data))
             }
             return Disposables.create {
                 request.cancel()

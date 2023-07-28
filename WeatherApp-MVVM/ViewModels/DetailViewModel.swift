@@ -192,7 +192,7 @@ class DetailViewModel {
         
         return weatherModel.fetchWeatherIcon(iconName: iconName) // Single<Data>で返ってくる
             .map { iconData in
-                DisplayWeatherData(date: date, time: time, iconData: iconData, maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
+                DisplayWeatherData(date: date, time: time, iconData: iconData ?? Data(), maxTemparture: maxTemparture, minTemparture: minTemparture, humidity: humidit)
             }
     }
     
