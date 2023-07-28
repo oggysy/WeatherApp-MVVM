@@ -17,16 +17,13 @@ class LoadingView: UIView {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        self.isUserInteractionEnabled = false // タップイベントを無効化(indicatorで設定するとタップが透過する)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
         addSubview(indicator)
         
         NSLayoutConstraint.activate([
-            indicator.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            indicator.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            indicator.topAnchor.constraint(equalTo: self.topAnchor),
-            indicator.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            indicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         ])
     }
     

@@ -46,7 +46,10 @@ class DetailViewModel {
         isLoading.accept(true) // indicatorを開始
         weatherModel = APICaller()
         fetchDataTrigger.subscribe(onDisposed: { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                self?.isLoading.accept(false)
+                return
+            }
             todayDate.onNext(getTodayDate()) //今日の日付を取得してtodayDateに通知しておく
             // pregectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
             let weatherDataSingle: Single<WeatherData>
@@ -58,7 +61,6 @@ class DetailViewModel {
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
             } else {
                 weatherDataSingle = Single.error(NilError.parameterUnSet("現在地も都道府県もセットされていません"))
-                return
             }
             weatherDataSingle
             // API通信の結果がSingle<WeatherData>で返ってくる
@@ -81,6 +83,7 @@ class DetailViewModel {
                     self.isLoading.accept(false) //indicatorを停止
                 }, onFailure: { error in
                     print(error)
+                    self.isLoading.accept(false)
                 })
                 .disposed(by: disposeBag)
         }).disposed(by: disposeBag)
