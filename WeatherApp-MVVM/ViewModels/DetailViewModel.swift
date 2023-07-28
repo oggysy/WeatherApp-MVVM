@@ -37,6 +37,9 @@ class DetailViewModel {
     }
     
     let isLoading = BehaviorRelay(value: false)
+    var isLoadingDriver: Driver<Bool> {
+        isLoading.asDriver()
+    }
     
     let fetchDataTrigger = PublishSubject<Void>()
     private let weatherModel: WeatherAPIProtcol
