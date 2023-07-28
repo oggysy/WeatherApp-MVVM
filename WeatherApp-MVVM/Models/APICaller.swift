@@ -15,23 +15,23 @@ import CoreLocation
 protocol WeatherAPIProtcol {
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType>
     func fetchWeatherIcon(iconName: String) -> Single<Data?>
-    func setupRequest(prefecture: String) -> WeatherRequestModel
-    func setupRequest(location: CLLocation) -> WeatherRequestModel
+    func setupRequest<R: WeatherRequest>(prefecture: String, model: R) -> R
+    func setupRequest<R: WeatherRequest>(location: CLLocation, model: R) -> R
 }
 
 class APICaller: WeatherAPIProtcol {
     
-    func setupRequest(prefecture: String) -> WeatherRequestModel {
-        var request = WeatherRequestModel()
-        request.parameters["q"] = prefecture
-        return request
+    func setupRequest<R: WeatherRequest>(prefecture: String, model: R) -> R {
+        var model = model
+        model.parameters["q"] = prefecture
+        return model
     }
     
-    func setupRequest(location: CLLocation) -> WeatherRequestModel {
-        var request = WeatherRequestModel()
-        request.parameters["lat"] = String(location.coordinate.latitude)
-        request.parameters["lon"] = String(location.coordinate.longitude)
-        return request
+    func setupRequest<R: WeatherRequest>(location: CLLocation, model: R) -> R {
+        var model = model
+        model.parameters["lat"] = String(location.coordinate.latitude)
+        model.parameters["lon"] = String(location.coordinate.longitude)
+        return model
     }
     
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType> {

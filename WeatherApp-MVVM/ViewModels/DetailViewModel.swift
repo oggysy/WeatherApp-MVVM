@@ -62,10 +62,10 @@ class DetailViewModel {
             // prefectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
             let weatherDataSingle: Single<WeatherData>
             if let prefecture = prefecture {
-                let request = weatherModel.setupRequest(prefecture: prefecture)
+                let request = weatherModel.setupRequest(prefecture: prefecture, model: WeatherRequestModel())
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
             } else if let location = location {
-                let request = weatherModel.setupRequest(location: location)
+                let request = weatherModel.setupRequest(location: location, model: WeatherRequestModel())
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
             } else {
                 weatherDataSingle = Single.error(ParameterError.parameterUnSet("現在地も都道府県もセットされていません"))
