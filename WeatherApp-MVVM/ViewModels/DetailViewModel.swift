@@ -80,9 +80,9 @@ class DetailViewModel {
                             self.timeArray.append(threeHourlyWeather.dt.changeTimeString())
                         })
                         .concatMap { threeHourlyWeather in // concatMapにして配列の順番通りに処理する
-                            self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // DisplayDataに変換　返り値はSingle<DisplayWeatherData>(IconDataをAPI通信で取得しているため)
+                            self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // Single<DisplayWeatherData>で返ってくるが、concatMapでObservable<DisplayWeatherData>にまとめられる
                         }
-                        .toArray() //配列に戻す
+                        .toArray() //配列に戻す(.toArrayはSingleで返る)
                 }
                 .subscribe(onSuccess: { displayData in // ここでの結果はfetchWeatherDataのsuccessかfailureが返ってくるためエラー分岐できる
                     let sectionData = self.changeToSectionWeatherData(weatherData: displayData) // SectionWeatherDataに変換処理
@@ -90,55 +90,7 @@ class DetailViewModel {
                     self.isLoading.accept(false) //indicatorを停止
                 }, onFailure: { error in
                     self.isLoading.accept(false) //エラーの場合もindicatorを停止
-                    if let afError = error as? AFError {
-                        switch afError {
-                            // Sessionエラーを検知
-                        case .sessionTaskFailed(error: let sessionError):
-                            if let urlError = sessionError as? URLError {
-                                switch urlError.code {
-                                case .notConnectedToInternet:
-                                    self.APIErrorMessage.accept("ネットワークに接続できませんでした")
-                                case .timedOut:
-                                    self.APIErrorMessage.accept("タイムアウトしました")
-                                default :
-                                    self.APIErrorMessage.accept("URLError　Other Error: \(urlError.localizedDescription)")
-                                }
-                            } else {
-                                self.APIErrorMessage.accept("SessionTaskFailed　Other Error: \(sessionError)")
-                            }
-
-                            // status codeが200番台以外を検知
-                        case .responseValidationFailed(reason: let reason):
-                            switch reason {
-                            case .unacceptableStatusCode(code: let code):
-                                if code >= 400 && code < 600 {
-                                    self.APIErrorMessage.accept("データの取得に失敗しました")
-                                }
-                            default :
-                                self.APIErrorMessage.accept("Response Validation Other Error")
-                            }
-                            
-                            // レスポンスエラー(主にデコードエラーを検知)
-                        case .responseSerializationFailed(reason: let reason) :
-                            switch reason {
-                            case .decodingFailed:
-                                self.APIErrorMessage.accept("デコードに失敗しました")
-                            default:
-                                self.APIErrorMessage.accept("Response Other Error")
-                            }
-                        default :
-                            self.APIErrorMessage.accept("Other AFError: \(afError)")
-                        }
-                    }
-                    else if let responceError = error as? ResponseError {
-                        switch responceError {
-                        case .nilData:
-                            self.APIErrorMessage.accept("データの取得に失敗しました")
-                        }
-                    }
-                    else {
-                        self.APIErrorMessage.accept("Other Error: \(error)")
-                    }
+                    self.errorHandling(error: error)
                 })
                 .disposed(by: disposeBag)
         }).disposed(by: disposeBag)
@@ -147,16 +99,7 @@ class DetailViewModel {
         weatherData
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                var dataEntries: [ChartDataEntry] = []
-                for (index, pop) in self.popArray.enumerated() {
-                    let entry = ChartDataEntry(x: Double(index), y: pop)
-                    dataEntries.append(entry)
-                }
-                let dataSet = LineChartDataSet(entries: dataEntries, label: "")
-                let chartData = LineChartData(dataSet: dataSet)
-                self.chartData.accept(chartData)
-                let formatter = IndexAxisValueFormatter(values: self.timeArray)
-                self.chartFormatter.accept(formatter)
+                self.updateChartsData()
             })
             .disposed(by: disposeBag)
     }
@@ -196,6 +139,68 @@ class DetailViewModel {
             }
     }
     
+    private func errorHandling(error: Error) {
+        if let afError = error as? AFError {
+            switch afError {
+                // Sessionエラーを検知
+            case .sessionTaskFailed(error: let sessionError):
+                if let urlError = sessionError as? URLError {
+                    switch urlError.code {
+                    case .notConnectedToInternet:
+                        self.APIErrorMessage.accept("ネットワークに接続できませんでした")
+                    case .timedOut:
+                        self.APIErrorMessage.accept("タイムアウトしました")
+                    default :
+                        self.APIErrorMessage.accept("URLError　Other Error: \(urlError.localizedDescription)")
+                    }
+                } else {
+                    self.APIErrorMessage.accept("SessionTaskFailed　Other Error: \(sessionError)")
+                }
+                // status codeが200番台以外を検知
+            case .responseValidationFailed(reason: let reason):
+                switch reason {
+                case .unacceptableStatusCode(code: let code):
+                    if code >= 400 && code < 600 {
+                        self.APIErrorMessage.accept("データの取得に失敗しました")
+                    }
+                default :
+                    self.APIErrorMessage.accept("Response Validation Other Error")
+                }
+                // レスポンスエラー(主にデコードエラーを検知)
+            case .responseSerializationFailed(reason: let reason) :
+                switch reason {
+                case .decodingFailed:
+                    self.APIErrorMessage.accept("デコードに失敗しました")
+                default:
+                    self.APIErrorMessage.accept("Response Other Error")
+                }
+            default :
+                self.APIErrorMessage.accept("Other AFError: \(afError)")
+            }
+        }
+        else if let responceError = error as? ResponseError {
+            switch responceError {
+            case .nilData:
+                self.APIErrorMessage.accept("データの取得に失敗しました")
+            }
+        }
+        else {
+            self.APIErrorMessage.accept("Other Error: \(error)")
+        }
+    }
+    
+    private func updateChartsData() {
+        var dataEntries: [ChartDataEntry] = []
+        for (index, pop) in self.popArray.enumerated() {
+            let entry = ChartDataEntry(x: Double(index), y: pop)
+            dataEntries.append(entry)
+        }
+        let dataSet = LineChartDataSet(entries: dataEntries, label: "")
+        let chartData = LineChartData(dataSet: dataSet)
+        self.chartData.accept(chartData)
+        let formatter = IndexAxisValueFormatter(values: self.timeArray)
+        self.chartFormatter.accept(formatter)
+    }
 }
 
 enum ParameterError: Error {
