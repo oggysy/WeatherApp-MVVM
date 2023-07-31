@@ -38,7 +38,11 @@ class APICaller: WeatherAPIProtcol {
         return Single<req.ResponseType>.create { single in
             let decoder = JSONDecoder()
             // AF.requestでタイムアウト8秒、statusCode200番以外は.responseValidationFailedエラーで返すを設定
-            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters, requestModifier: { $0.timeoutInterval = 8.0 }).validate(statusCode:  200..<300).responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
+            let weatherRequest = AF.request(request.baseURL + request.path,
+                                            parameters: request.parameters,
+                                            requestModifier: { $0.timeoutInterval = 8.0 })
+                .validate(statusCode:  200..<300)
+                .responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
                 switch response.result {
                 case .success:
                     if let weather = response.value {
