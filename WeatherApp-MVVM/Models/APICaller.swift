@@ -48,7 +48,7 @@ class APICaller: WeatherAPIProtcol {
                     if let weather = response.value {
                         single(.success(weather))
                     } else {
-                        single(.failure(ResponseError.nilData))
+                        single(.failure(APIError.nilData))
                     }
                 case .failure(let error):
                     single(.failure(error))
@@ -73,6 +73,3 @@ class APICaller: WeatherAPIProtcol {
     }
 }
 
-enum ResponseError: Error {
-    case nilData
-}

@@ -41,7 +41,7 @@ class DetailViewModel {
     var isLoadingDriver: Driver<Bool> {
         isLoading.asDriver()
     }
-    private var APIErrorMessage = PublishRelay<String>()
+    private var APIErrorMessage = BehaviorRelay<String>(value: "")
     var APIErrorMessageDriver: Driver<String> {
         return APIErrorMessage.asDriver(onErrorJustReturn: "")
     }
@@ -68,7 +68,7 @@ class DetailViewModel {
                 let request = weatherModel.setupRequest(location: location, model: WeatherRequestModel())
                 weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
             } else {
-                weatherDataSingle = Single.error(ParameterError.parameterUnSet("現在地も都道府県もセットされていません"))
+                weatherDataSingle = Single.error(APIError.parameterUnSet("現在地も都道府県もセットされていません"))
             }
             weatherDataSingle // API通信の結果がSingle<WeatherData>で返ってくる
                 .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
@@ -178,10 +178,12 @@ class DetailViewModel {
                 self.APIErrorMessage.accept("Other AFError: \(afError)")
             }
         }
-        else if let responceError = error as? ResponseError {
-            switch responceError {
+        else if let apiError = error as? APIError {
+            switch apiError {
             case .nilData:
                 self.APIErrorMessage.accept("データの取得に失敗しました")
+            case .parameterUnSet(let error):
+                self.APIErrorMessage.accept("\(error)")
             }
         }
         else {
@@ -203,6 +205,7 @@ class DetailViewModel {
     }
 }
 
-enum ParameterError: Error {
+enum APIError: Error {
+    case nilData
     case parameterUnSet(String)
 }
