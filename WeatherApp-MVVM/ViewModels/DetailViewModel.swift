@@ -15,91 +15,74 @@ import Alamofire
 
 class DetailViewModel {
     
-    var selectedPrefecture = BehaviorSubject<String>(value: "")
-    var currentLocation: CLLocation?
+    public var selectedPrefecture = BehaviorSubject<String>(value: "Loading")
+    private var selectedPrefectureString: String?
+    private var currentLocation: CLLocation?
     
-    private let weatherData = BehaviorRelay<[SectionWeatherData]>(value: [])
-    var weatherDataDriver: Driver<[SectionWeatherData]> {
-        weatherData.asDriver()
-    }
-    private let chartData = PublishRelay<LineChartData>()
-    var chartDataDriver: Driver<LineChartData> {
-        chartData.asDriver(onErrorJustReturn: LineChartData())
-    }
-    private let chartFormatter = PublishRelay<IndexAxisValueFormatter>()
-    var chartFormatterDriver: Driver<IndexAxisValueFormatter> {
-        chartFormatter.asDriver(onErrorJustReturn: IndexAxisValueFormatter())
-    }
+    public let weatherData = PublishRelay<[SectionWeatherData]>()
+    public let chartData = PublishRelay<LineChartData>()
+    public let chartFormatter = PublishRelay<IndexAxisValueFormatter>()
     private var popArray: [Double] = []
     private var timeArray: [String] = []
-    private var todayDate = BehaviorSubject<String>(value: "")
-    var todayDateDriver: Driver<String> {
-        todayDate.asDriver(onErrorJustReturn: "")
-    }
+    public var todayDate = BehaviorSubject<String>(value: "")
     
     let isLoading = BehaviorRelay(value: false)
     var isLoadingDriver: Driver<Bool> {
         isLoading.asDriver()
     }
-    private var APIErrorMessage = BehaviorRelay<String>(value: "")
-    var APIErrorMessageDriver: Driver<String> {
-        return APIErrorMessage.asDriver(onErrorJustReturn: "")
-    }
+    public var APIErrorMessage = PublishRelay<String>()
     
-    let fetchDataTrigger = PublishSubject<Void>()
     private let weatherModel: WeatherAPIProtcol
     private let disposeBag = DisposeBag()
     
     init(prefecture: String? = nil, location: CLLocation? = nil) {
-        isLoading.accept(true) // indicatorを開始
         weatherModel = APICaller()
-        fetchDataTrigger.subscribe(onDisposed: { [weak self] in
-            guard let self = self else {
-                self?.isLoading.accept(false)
-                return
-            }
-            todayDate.onNext(getTodayDate()) //今日の日付を取得してtodayDateに通知しておく
-            // prefectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
-            let weatherDataSingle: Single<WeatherData>
-            if let prefecture = prefecture {
-                let request = weatherModel.setupRequest(prefecture: prefecture, model: WeatherRequestModel())
-                weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
-            } else if let location = location {
-                let request = weatherModel.setupRequest(location: location, model: WeatherRequestModel())
-                weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
-            } else {
-                weatherDataSingle = Single.error(APIError.parameterUnSet("現在地も都道府県もセットされていません"))
-            }
-            weatherDataSingle // API通信の結果がSingle<WeatherData>で返ってくる
-                .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
-                    self.selectedPrefecture.onNext(data.city.name) //　都市名の表示を反映
-                    let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
-                    return observable
-                        .do(onNext: { threeHourlyWeather in // charts用に時間とpopデータを配列に追加
-                            self.popArray.append(threeHourlyWeather.pop * 100)
-                            self.timeArray.append(threeHourlyWeather.dt.changeTimeString())
-                        })
-                        .concatMap { threeHourlyWeather in // concatMapにして配列の順番通りに処理する
-                            self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // Single<DisplayWeatherData>で返ってくるが、concatMapでObservable<DisplayWeatherData>にまとめられる
-                        }
-                        .toArray() //配列に戻す(.toArrayはSingleで返る)
-                }
-                .subscribe(onSuccess: { displayData in // ここでの結果はfetchWeatherDataのsuccessかfailureが返ってくるためエラー分岐できる
-                    let sectionData = self.changeToSectionWeatherData(weatherData: displayData) // SectionWeatherDataに変換処理
-                    self.weatherData.accept(sectionData)
-                    self.isLoading.accept(false) //indicatorを停止
-                }, onFailure: { error in
-                    self.isLoading.accept(false) //エラーの場合もindicatorを停止
-                    self.errorHandling(error: error)
-                })
-                .disposed(by: disposeBag)
-        }).disposed(by: disposeBag)
-        
+        selectedPrefectureString = prefecture
+        currentLocation = location
+        todayDate.onNext(getTodayDate()) //今日の日付を取得してtodayDateに通知しておく
         // weatherDataが更新されたタイミングでChart用のデータを更新
         weatherData
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.updateChartsData()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    public func fetch() {
+        isLoading.accept(true) // indicatorを開始
+        // prefectureが渡されているか、初期化時にlocationが渡されているかで条件分岐
+        let weatherDataSingle: Single<WeatherData>
+        if let prefecture = selectedPrefectureString {
+            let request = weatherModel.setupRequest(prefecture: prefecture, model: WeatherRequestModel())
+            weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
+        } else if let location = currentLocation {
+            let request = weatherModel.setupRequest(location: location, model: WeatherRequestModel())
+            weatherDataSingle = self.weatherModel.fetchWeatherData(request: request)
+        } else {
+            weatherDataSingle = Single.error(APIError.parameterUnSet("現在地も都道府県もセットされていません"))
+        }
+        weatherDataSingle // API通信の結果がSingle<WeatherData>で返ってくる
+            .flatMap { data -> Single<[DisplayWeatherData]> in // flatmapで流れてきたWeatherDataを変化させる
+                self.selectedPrefecture.onNext(data.city.name) //　都市名の表示を反映
+                let observable = Observable.from(data.list) // Observableを作る([ThreeHourlyWeather])
+                return observable
+                    .do(onNext: { threeHourlyWeather in // charts用に時間とpopデータを配列に追加
+                        self.popArray.append(threeHourlyWeather.pop * 100)
+                        self.timeArray.append(threeHourlyWeather.dt.changeTimeString())
+                    })
+                        .concatMap { threeHourlyWeather in // concatMapにして配列の順番通りに処理する
+                            self.changeDisplayData(threeHourlyWeather: threeHourlyWeather) // Single<DisplayWeatherData>で返ってくるが、concatMapでObservable<DisplayWeatherData>にまとめられる
+                        }
+                        .toArray() //配列に戻す(.toArrayはSingleで返る)
+            }
+            .subscribe(onSuccess: { displayData in // ここでの結果はfetchWeatherDataのsuccessかfailureが返ってくるためエラー分岐できる
+                let sectionData = self.changeToSectionWeatherData(weatherData: displayData) // SectionWeatherDataに変換処理
+                self.weatherData.accept(sectionData)
+                self.isLoading.accept(false) //indicatorを停止
+            }, onFailure: { error in
+                self.isLoading.accept(false) //エラーの場合もindicatorを停止
+                self.errorHandling(error: error)
             })
             .disposed(by: disposeBag)
     }
