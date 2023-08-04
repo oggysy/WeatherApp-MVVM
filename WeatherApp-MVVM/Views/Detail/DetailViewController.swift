@@ -51,17 +51,28 @@ class DetailViewController: UIViewController {
             closeButton.rx.tap.subscribe { _ in
                 self.dismiss(animated: true)
             },
-            Observable.just(()).bind(to: viewModel.fetchDataTrigger),
-            viewModel.weatherDataDriver.drive(detailTableView.rx.items(dataSource: dataSource)),
-            viewModel.selectedPrefecture.bind(to: prefectureLabel.rx.text),
-            viewModel.chartDataDriver.drive(popChartView.rx.chartData),
-            viewModel.chartFormatterDriver.drive(popChartView.xAxis.rx.valueFormatter),
-            viewModel.todayDateDriver.drive(dateLabel.rx.text),
+            viewModel.weatherData.asDriver(onErrorJustReturn: []).drive(detailTableView.rx.items(dataSource: dataSource)),
+            viewModel.selectedPrefecture.asDriver(onErrorJustReturn: "エラー").drive(prefectureLabel.rx.text),
+            viewModel.chartData.asDriver(onErrorJustReturn: LineChartData()).drive(popChartView.rx.chartData),
+            viewModel.chartFormatter.asDriver(onErrorJustReturn: IndexAxisValueFormatter()).drive(popChartView.xAxis.rx.valueFormatter),
+            viewModel.todayDate.asDriver(onErrorJustReturn: "").drive(dateLabel.rx.text),
             viewModel.isLoadingDriver.drive(loadingView.indicator.rx.isAnimating),
             viewModel.isLoadingDriver.map { !($0) }.drive(loadingView.rx.isHidden),
-            viewModel.isLoadingDriver.map { !($0) }.drive(view.rx.isUserInteractionEnabled)
+            viewModel.isLoadingDriver.map { !($0) }.drive(view.rx.isUserInteractionEnabled),
+            viewModel.APIErrorMessage.asDriver(onErrorJustReturn: "").drive(onNext: { message in
+                let alert = UIAlertController(title: "エラー", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: { _ in
+                    self.dismiss(animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            })
         )
         displayChart()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.fetch()
     }
     
     private func displayChart() {

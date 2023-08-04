@@ -14,36 +14,41 @@ import CoreLocation
 
 protocol WeatherAPIProtcol {
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType>
-    func fetchWeatherIcon(iconName: String) -> Single<Data>
-    func setupRequest(prefecture: String) -> WeatherRequestModel
-    func setupRequest(location: CLLocation) -> WeatherRequestModel
+    func fetchWeatherIcon(iconName: String) -> Single<Data?>
+    func setupRequest<R: WeatherRequest>(prefecture: String, model: R) -> R
+    func setupRequest<R: WeatherRequest>(location: CLLocation, model: R) -> R
 }
 
 class APICaller: WeatherAPIProtcol {
     
-    func setupRequest(prefecture: String) -> WeatherRequestModel {
-        var request = WeatherRequestModel()
-        request.parameters["q"] = prefecture
-        return request
+    func setupRequest<R: WeatherRequest>(prefecture: String, model: R) -> R {
+        var model = model
+        model.parameters["q"] = prefecture
+        return model
     }
     
-    func setupRequest(location: CLLocation) -> WeatherRequestModel {
-        var request = WeatherRequestModel()
-        request.parameters["lat"] = String(location.coordinate.latitude)
-        request.parameters["lon"] = String(location.coordinate.longitude)
-        return request
+    func setupRequest<R: WeatherRequest>(location: CLLocation, model: R) -> R {
+        var model = model
+        model.parameters["lat"] = String(location.coordinate.latitude)
+        model.parameters["lon"] = String(location.coordinate.longitude)
+        return model
     }
     
     func fetchWeatherData<req: WeatherRequest>(request: req) -> Single<req.ResponseType> {
         return Single<req.ResponseType>.create { single in
             let decoder = JSONDecoder()
-            let weatherRequest = AF.request(request.baseURL + request.path, parameters: request.parameters).responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
+            // AF.requestでタイムアウト8秒、statusCode200番以外は.responseValidationFailedエラーで返すを設定
+            let weatherRequest = AF.request(request.baseURL + request.path,
+                                            parameters: request.parameters,
+                                            requestModifier: { $0.timeoutInterval = 8.0 })
+                .validate(statusCode:  200..<300)
+                .responseDecodable(of: req.ResponseType.self, decoder: decoder) { response in
                 switch response.result {
                 case .success:
                     if let weather = response.value {
                         single(.success(weather))
                     } else {
-                        single(.failure(NError.nilData))
+                        single(.failure(APIError.nilData))
                     }
                 case .failure(let error):
                     single(.failure(error))
@@ -54,16 +59,12 @@ class APICaller: WeatherAPIProtcol {
             }
         }
     }
-
-    func fetchWeatherIcon(iconName: String) -> Single<Data>{
+    
+    func fetchWeatherIcon(iconName: String) -> Single<Data?>{
         return Single.create { single in
             let iconUrl = "https://openweathermap.org/img/wn/\(iconName).png"
             let request = AF.request(iconUrl).response { response in
-                if let data = response.data {
-                    single(.success(data))
-                } else {
-                    single(.failure(NSError(domain: "", code: -1, userInfo: nil)))  // Error handling here
-                }
+                single(.success(response.data))
             }
             return Disposables.create {
                 request.cancel()
@@ -72,6 +73,3 @@ class APICaller: WeatherAPIProtcol {
     }
 }
 
-enum NError: Error {
-    case nilData
-}
