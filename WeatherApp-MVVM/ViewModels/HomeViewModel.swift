@@ -25,9 +25,30 @@ class HomeViewModel {
     var locationErrorMessageDriver: Driver<String> {
         return locationErrorMessage.asDriver(onErrorJustReturn: "")
     }
+    var bellButtonStatus: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    var showSettingNotificationAlert = PublishRelay<Void>()
+    var setNotificationTime = PublishRelay<[String: Int]>()
+    var setNotificationResult = PublishRelay<(String, String)>()
     
-    init(locationButtonObservable: Signal<Void>){
+    init(locationButtonObservable: Signal<Void>, bellButtonObservable: Signal<Void>){
         self.locationManager.requestWhenInUseAuthorization()
+        UserNotificationUnit.shared.showPushPermit { result in
+            switch result {
+            case .success(let isGranted):
+                print(isGranted)
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
+            }
+        }
+        // 初期化時に通知設定があるかを確認し、状態をbellボタンに反映
+        UserNotificationUnit.shared.center.getPendingNotificationRequests { request in
+            if request.isEmpty {
+                self.bellButtonStatus.accept(false)
+            } else {
+                self.bellButtonStatus.accept(true)
+            }
+        }
+        
         disposeBag.insert(
             locationButtonObservable.emit(onNext: { _ in
                 guard let status = self.locationAuthorizationStatus else { return }
@@ -68,6 +89,32 @@ class HomeViewModel {
                     self.locationAuthorizationStatus = .authorizedWhenInUse
                 default:
                     print("locationManagerの不明なエラー")
+                }
+            }),
+            bellButtonObservable.emit(onNext: { _ in
+                UserNotificationUnit.shared.center.getPendingNotificationRequests { request in
+                    if request.isEmpty {
+                        self.showSettingNotificationAlert.accept(())
+                    } else {
+                        UserNotificationUnit.shared.center.removeAllPendingNotificationRequests()
+                        self.setNotificationResult.accept(("通知スケジュール削除完了","通知を削除しました"))
+                        self.bellButtonStatus.accept(false)
+                    }
+                }
+            }),
+            setNotificationTime.subscribe(onNext: { times in
+                let hour = times["hour"] ?? 0
+                let minutes = times["minutes"] ?? 0
+                let request = UserNotificationUnit.shared.createTimeRequest(hour: hour, minute: minutes)
+                UserNotificationUnit.shared.center.add(request) { error in
+                    if let error = error {
+                        self.setNotificationResult.accept(("通知スケジュール失敗","通知の設定に失敗しました\(error)"))
+                    } else {
+                        let hour = String(hour)
+                        let minutes = String(format: "%02d", minutes)
+                        self.setNotificationResult.accept(("通知スケジュール成功","毎日\(hour)時\(minutes)分に通知がされます"))
+                        self.bellButtonStatus.accept(true)
+                    }
                 }
             })
         )
