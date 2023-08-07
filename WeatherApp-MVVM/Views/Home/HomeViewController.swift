@@ -13,8 +13,13 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var currentLocationButton: UIButton!
-    lazy var viewModel: HomeViewModel = { [self] in
-        return HomeViewModel(locationButtonObservable: currentLocationButton.rx.tap.asSignal())
+    var naviBarRightButton: UIBarButtonItem = {
+        let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: nil, action: nil)
+        rightButton.tintColor = .white
+        return rightButton
+    }()
+    lazy var viewModel: HomeViewModel = {
+        return HomeViewModel(locationButtonObservable: currentLocationButton.rx.tap.asSignal(), bellButtonObservable: naviBarRightButton.rx.tap.asSignal())
     }()
     let disposeBag = DisposeBag()
     
@@ -25,7 +30,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc func rightButtonTapped() {
-        // ベルボタンタップの処理を後で実装
+        showSettingNotificationAlert()
     }
     
     private func setUpNavigationBar() {
@@ -39,10 +44,7 @@ class HomeViewController: UIViewController {
         }()
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(rightButtonTapped))
-        rightButton.tintColor = .white
-        navigationItem.rightBarButtonItem = rightButton
+        navigationItem.rightBarButtonItem = naviBarRightButton
     }
     
     private func setUpButtonAction() {
@@ -57,6 +59,18 @@ class HomeViewController: UIViewController {
             }),
             viewModel.locationErrorMessageDriver.drive(onNext: { message in
                 self.showGPSAlert(message: message)
+            }),
+            viewModel.bellButtonStatus.asDriver(onErrorJustReturn: false).drive(onNext: { isEnable in
+                self.naviBarRightButton.image = isEnable ? UIImage(systemName: "bell") : UIImage(systemName: "bell.slash")
+            }),
+            viewModel.showSettingNotificationAlert.asDriver(onErrorJustReturn: ()).drive(onNext: { _ in
+                self.showSettingNotificationAlert()
+            }),
+            viewModel.setNotificationResult.asDriver(onErrorJustReturn: ("","")).drive(onNext: { (title, message) in
+                self.showNotificationResultAlert(title: title, message: message)
+            }),
+            viewModel.setNotificationUnauthorized.asDriver(onErrorJustReturn: ("","")).drive(onNext: { (title, message) in
+                self.showNotificationUnauthorizedAlert(title: title, message: message)
             })
         )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
@@ -74,4 +88,53 @@ class HomeViewController: UIViewController {
         }
         present(alert, animated: true, completion: nil)
     }
+    
+    private func showSettingNotificationAlert() {
+        let title = "通知したい時間を選択"
+        let message: String? = nil
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        let pickerView = UIDatePicker()
+        pickerView.datePickerMode = .time
+        pickerView.locale = Locale.current
+        pickerView.timeZone = TimeZone.current
+        alert.view.addSubview(pickerView)
+
+        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pickerView.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 50),
+            pickerView.bottomAnchor.constraint(equalTo: alert.view.bottomAnchor, constant: -60),
+            pickerView.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor)
+        ])
+        let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel) { _ in
+        }
+        let okAction = UIAlertAction(title: "設定", style: .default) { _ in
+            let hour = Calendar.current.component(.hour, from: pickerView.date)
+            let minutes = Calendar.current.component(.minute, from: pickerView.date)
+            self.viewModel.setNotificationTime.accept(["hour": hour, "minutes": minutes])
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showNotificationResultAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func showNotificationUnauthorizedAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "設定", style: .default) { (_) in
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSettings, completionHandler: nil)
+                }
+            }
+        alert.addAction(settingsAction)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
 }
