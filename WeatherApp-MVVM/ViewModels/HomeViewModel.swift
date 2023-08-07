@@ -74,6 +74,10 @@ class HomeViewModel {
                         return }
                     if !self.didUpdateLocation {
                         self.locationSubject.onNext(newLocation)
+                        // ウィジェット用に現在地をUserDefaultsに記録
+                        let sharedDefaults = UserDefaults(suiteName: "group.com.yuusuke.ogiso.WeatherApp-MVVM")
+                        sharedDefaults?.set(String(newLocation.coordinate.latitude), forKey: "latitude")
+                        sharedDefaults?.set(String(newLocation.coordinate.longitude), forKey: "longitude")
                         self.locationManager.stopUpdatingLocation()  // 位置情報の取得を停止する
                         self.didUpdateLocation = true
                     }
