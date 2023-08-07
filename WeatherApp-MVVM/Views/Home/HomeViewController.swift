@@ -60,15 +60,17 @@ class HomeViewController: UIViewController {
             viewModel.locationErrorMessageDriver.drive(onNext: { message in
                 self.showGPSAlert(message: message)
             }),
-            viewModel.bellButtonStatus.asDriver(onErrorJustReturn: false).drive(onNext: { bool in
-                self.naviBarRightButton.image = bool ? UIImage(systemName: "bell") : UIImage(systemName: "bell.slash")
+            viewModel.bellButtonStatus.asDriver(onErrorJustReturn: false).drive(onNext: { isEnable in
+                self.naviBarRightButton.image = isEnable ? UIImage(systemName: "bell") : UIImage(systemName: "bell.slash")
             }),
             viewModel.showSettingNotificationAlert.asDriver(onErrorJustReturn: ()).drive(onNext: { _ in
                 self.showSettingNotificationAlert()
             }),
-            viewModel.setNotificationResult.asDriver(onErrorJustReturn: ("","")).drive(onNext: { messageTuple in
-                let (title, message) = messageTuple
+            viewModel.setNotificationResult.asDriver(onErrorJustReturn: ("","")).drive(onNext: { (title, message) in
                 self.showNotificationResultAlert(title: title, message: message)
+            }),
+            viewModel.setNotificationUnauthorized.asDriver(onErrorJustReturn: ("","")).drive(onNext: { (title, message) in
+                self.showNotificationUnauthorizedAlert(title: title, message: message)
             })
         )
         selectButton.setImage(UIImage(systemName: "list.bullet"), for: .normal)
@@ -121,4 +123,18 @@ class HomeViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
+    func showNotificationUnauthorizedAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let settingsAction = UIAlertAction(title: "設定", style: .default) { (_) in
+                if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSettings, completionHandler: nil)
+                }
+            }
+        alert.addAction(settingsAction)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
 }

@@ -9,8 +9,8 @@ import UserNotifications
 
 
 final class UserNotificationUnit : NSObject {
-    static var shared = UserNotificationUnit()
-    public var center = UNUserNotificationCenter.current()
+    static let shared = UserNotificationUnit()
+    let center = UNUserNotificationCenter.current()
     
     func initialize() {
         center.delegate = UserNotificationUnit.shared
@@ -37,6 +37,12 @@ final class UserNotificationUnit : NSObject {
         content.badge = 0
         content.sound = .defaultCritical
         return UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+    }
+    
+    func checkNotificationAuthorizationStatus(completion: @escaping (UNAuthorizationStatus) -> Void) {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            completion(settings.authorizationStatus)
+        }
     }
 }
 

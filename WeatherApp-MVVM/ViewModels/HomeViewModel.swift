@@ -29,6 +29,7 @@ class HomeViewModel {
     var showSettingNotificationAlert = PublishRelay<Void>()
     var setNotificationTime = PublishRelay<[String: Int]>()
     var setNotificationResult = PublishRelay<(String, String)>()
+    var setNotificationUnauthorized = PublishRelay<(String, String)>()
     
     init(locationButtonObservable: Signal<Void>, bellButtonObservable: Signal<Void>){
         self.locationManager.requestWhenInUseAuthorization()
@@ -92,15 +93,28 @@ class HomeViewModel {
                 }
             }),
             bellButtonObservable.emit(onNext: { _ in
-                UserNotificationUnit.shared.center.getPendingNotificationRequests { request in
-                    if request.isEmpty {
-                        self.showSettingNotificationAlert.accept(())
-                    } else {
-                        UserNotificationUnit.shared.center.removeAllPendingNotificationRequests()
-                        self.setNotificationResult.accept(("通知スケジュール削除完了","通知を削除しました"))
-                        self.bellButtonStatus.accept(false)
+                UserNotificationUnit.shared.checkNotificationAuthorizationStatus { status in
+                    switch status {
+                    case .notDetermined:
+                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
+                    case .denied:
+                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
+                    case .authorized:
+                        UserNotificationUnit.shared.center.getPendingNotificationRequests { request in
+                            if request.isEmpty {
+                                self.showSettingNotificationAlert.accept(())
+                            } else {
+                                UserNotificationUnit.shared.center.removeAllPendingNotificationRequests()
+                                self.setNotificationResult.accept(("通知スケジュール削除完了","通知を削除しました"))
+                                self.bellButtonStatus.accept(false)
+                            }
+                        }
+                    default:
+                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
                     }
                 }
+                
+                
             }),
             setNotificationTime.subscribe(onNext: { times in
                 let hour = times["hour"] ?? 0
