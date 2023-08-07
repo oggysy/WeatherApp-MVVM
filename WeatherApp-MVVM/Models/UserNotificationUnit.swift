@@ -29,7 +29,6 @@ final class UserNotificationUnit : NSObject {
     
     func createTimeRequest(hour: Int, minute: Int) -> UNNotificationRequest{
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current, hour: hour, minute: minute)
-        print(hour, minute)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "天気予報アプリ"
@@ -45,7 +44,6 @@ final class UserNotificationUnit : NSObject {
         }
     }
 }
-
 
 extension UserNotificationUnit: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

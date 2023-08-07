@@ -113,8 +113,6 @@ class HomeViewModel {
                         self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
                     }
                 }
-                
-                
             }),
             setNotificationTime.subscribe(onNext: { times in
                 let hour = times["hour"] ?? 0
