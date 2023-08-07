@@ -95,10 +95,6 @@ class HomeViewModel {
             bellButtonObservable.emit(onNext: { _ in
                 UserNotificationUnit.shared.checkNotificationAuthorizationStatus { status in
                     switch status {
-                    case .notDetermined:
-                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
-                    case .denied:
-                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
                     case .authorized:
                         UserNotificationUnit.shared.center.getPendingNotificationRequests { request in
                             if request.isEmpty {
@@ -110,7 +106,7 @@ class HomeViewModel {
                             }
                         }
                     default:
-                        self.setNotificationUnauthorized.accept(("通内が無効になっています","通知を有効にするためには設定を変更してください。"))
+                        self.setNotificationUnauthorized.accept(("通知が無効になっています","通知を有効にするためには設定を変更してください。"))
                     }
                 }
             }),
