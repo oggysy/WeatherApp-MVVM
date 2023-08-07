@@ -107,8 +107,8 @@ struct WeatherWidget: Widget {
             WeatherWidgetEntryView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("WeatherApp-MVVM")
+        .description("現在の天気情報を表示します")
     }
 }
 
