@@ -29,10 +29,6 @@ class HomeViewController: UIViewController {
         setUpButtonAction()
     }
     
-    @objc func rightButtonTapped() {
-        showSettingNotificationAlert()
-    }
-    
     private func setUpNavigationBar() {
         navigationItem.hidesBackButton = true
         navigationItem.title = "Home"
