@@ -99,6 +99,7 @@ struct WeatherWidgetEntryView : View {
     }
 }
 
+@main
 struct WeatherWidget: Widget {
     let kind: String = "WeatherWidget"
     

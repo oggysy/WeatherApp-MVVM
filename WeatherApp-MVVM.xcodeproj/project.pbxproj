@@ -30,7 +30,6 @@
 		28432C802A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28432C7F2A562B0B00C9A12E /* WeatherApp_MVVMUITestsLaunchTests.swift */; };
 		2853837C2A7D330200EEC002 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2853837B2A7D330200EEC002 /* WidgetKit.framework */; };
 		2853837E2A7D330200EEC002 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2853837D2A7D330200EEC002 /* SwiftUI.framework */; };
-		285383812A7D330200EEC002 /* WeatherWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285383802A7D330200EEC002 /* WeatherWidgetBundle.swift */; };
 		285383852A7D330200EEC002 /* WeatherWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285383842A7D330200EEC002 /* WeatherWidget.swift */; };
 		285383882A7D330300EEC002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 285383872A7D330300EEC002 /* Assets.xcassets */; };
 		2853838A2A7D330300EEC002 /* WeatherWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 285383862A7D330200EEC002 /* WeatherWidget.intentdefinition */; };
@@ -125,7 +124,6 @@
 		285383792A7D330200EEC002 /* WeatherWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WeatherWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2853837B2A7D330200EEC002 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		2853837D2A7D330200EEC002 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		285383802A7D330200EEC002 /* WeatherWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWidgetBundle.swift; sourceTree = "<group>"; };
 		285383842A7D330200EEC002 /* WeatherWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWidget.swift; sourceTree = "<group>"; };
 		285383862A7D330200EEC002 /* WeatherWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WeatherWidget.intentdefinition; sourceTree = "<group>"; };
 		285383872A7D330300EEC002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -332,7 +330,6 @@
 		2853837F2A7D330200EEC002 /* WeatherWidget */ = {
 			isa = PBXGroup;
 			children = (
-				285383802A7D330200EEC002 /* WeatherWidgetBundle.swift */,
 				285383842A7D330200EEC002 /* WeatherWidget.swift */,
 				2889553E2A80775F00CA324F /* WidgetWeatherData.swift */,
 				288955462A80933C00CA324F /* WidgetAPICaller.swift */,
@@ -584,7 +581,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				288955472A80933C00CA324F /* WidgetAPICaller.swift in Sources */,
-				285383812A7D330200EEC002 /* WeatherWidgetBundle.swift in Sources */,
 				288955452A808E2700CA324F /* TimeIntervarExt.swift in Sources */,
 				288955402A807A2500CA324F /* WidgetWeatherData.swift in Sources */,
 				285383852A7D330200EEC002 /* WeatherWidget.swift in Sources */,
